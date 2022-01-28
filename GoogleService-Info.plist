@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>148371021093-1io0a0keobgr8oi8b6dgnervn6o301b7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.148371021093-1io0a0keobgr8oi8b6dgnervn6o301b7</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDYrmFXHc9CwOBpDlC3PuguOiC5P5qGEH0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>148371021093</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.blackboxapp</string>
+	<key>PROJECT_ID</key>
+	<string>black-box-app-9c466</string>
+	<key>STORAGE_BUCKET</key>
+	<string>black-box-app-9c466.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:148371021093:ios:5dff958fff57ffe1b38ecc</string>
+	<key>DATABASE_URL</key>
+	<string>https://black-box-app-9c466-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
