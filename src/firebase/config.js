@@ -1,4 +1,3 @@
-
 //import * as firebase from 'firebase';
 // import '@firebase/auth';
 //import '@firebase/firestore';
@@ -6,6 +5,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { initializeApp } from "firebase/app";
+
 //import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
@@ -24,6 +24,8 @@ const firebaseConfig = {
 //     firebase.initializeApp(firebaseConfig);
 // }
 const app = initializeApp(firebaseConfig);
+
+
 //const analytics = getAnalytics(app);
 
 export { app };
