@@ -6,7 +6,9 @@ import { firebase } from '../../firebase/config';
 // import firebase from 'firebase/compat/app';
 // import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-//import { collection, addDoc } from "firebase/firestore"; 
+import { collection, addDoc, setDoc } from "firebase/firestore"; 
+
+import { getFirestore } from "firebase/firestore"
 
 
 
@@ -15,32 +17,45 @@ export default function HomeScreen({navigation}) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const db = getFirestore(firebase);
+
 
   
 
     const onRegisterPress = () => {
-        firebase
-            .then((response) => {
-                const uid = response.user.uid
-                const data = {
-                    id: uid,
-                    email,
-                    fullName,
-                };
-                const usersRef = firebase.firestore().collection('test')
-                usersRef
-                    .doc(uid)
-                    .set(data)
-                    .then(() => {
-                        navigation.navigate('Home', {user: data})
-                    })
-                    .catch((error) => {
-                        alert(error)
-                    });
-            })
-            .catch((error) => {
-                alert(error)
-        });
+
+        console.log('hello');
+        const docRef = addDoc(collection(db, "test"), {
+            name: fullName,
+            email_address: email
+            });
+            console.log("Document written with ID: ", docRef.id);
+
+
+
+        // console.log('hi')
+        // firebase
+        //     .then((response) => {
+        //         const uid = response.user.uid
+        //         const data = {
+        //             id: uid,
+        //             email,
+        //             fullName,
+        //         };
+        //         const usersRef = firebase.firestore().collection('test')
+        //         usersRef
+        //             .doc(uid)
+        //             .set(data)
+        //             .then(() => {
+        //                 navigation.navigate('Home', {user: data})
+        //             })
+        //             .catch((error) => {
+        //                 alert(error)
+        //             });
+        //     })
+        //     .catch((error) => {
+        //         alert(error)
+        // });
     }
 
     return (
