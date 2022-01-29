@@ -23,7 +23,8 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         { user ? (
-          <Stack.Screen name="Home" component={HomeScreen} />
+          <><Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Quote" component={QuoteScreen} /></>
         ) : (
           <>
             <Stack.Screen name="Quote" component={QuoteScreen} />

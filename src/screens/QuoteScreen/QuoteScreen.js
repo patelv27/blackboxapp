@@ -13,7 +13,7 @@ import { getFirestore } from "firebase/firestore"
 export default function QuoteScreen({navigation}) {
     return (
         <View style={styles.container}>
-            HI
+            <Text>Hi!!!!</Text>
         </View>
 
     )
