@@ -9,17 +9,26 @@ import 'firebase/compat/firestore';
 import { collection, addDoc, setDoc } from "firebase/firestore"; 
 import ValidationComponent from 'react-native-form-validator';
 import { useValidation } from 'react-native-form-validator';
+//import useScript from 'hooks/useScript';
+
+
 
 
 
 import { getFirestore } from "firebase/firestore"
+import { DeprecatedAccessibilityRoles } from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedViewAccessibility';
 
 export default function QuoteScreen({navigation}) {
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
+    const [date, setDate] = useState('')
+    const [depAirport, setdepAirPort] = useState('')
     const db = getFirestore(firebase);
+
+
+    // const airportnav = props => {
+    //     useScript("https://cdn.jsdelivr.net/npm/airport-autocomplete-js@latest/dist/index.browser.min.js");
+    // }
 
 
 
@@ -38,8 +47,8 @@ export default function QuoteScreen({navigation}) {
         return true;
     }
 
-    const { validate } = useValidation({
-        state: { email, fullName },
+    const { validate, isFieldInError, getErrorsInField, getErrorMessages} = useValidation({
+        state: { email, fullName, date},
       });
 
 
@@ -49,7 +58,9 @@ export default function QuoteScreen({navigation}) {
 
         if (validate({
             fullName: { minlength: 3, maxlength: 7, required: true },
-            email: { email: true, required: true}}))
+            email: { email: true, required: true},
+            date: { date: 'MM-DD-YYYY',required: true }}    
+            ))
         {
 
         
@@ -64,7 +75,9 @@ export default function QuoteScreen({navigation}) {
         }
     }
         
-    return (
+    return ( 
+
+
         <View style={styles.container}>
             <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
@@ -78,6 +91,10 @@ export default function QuoteScreen({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                {isFieldInError('fullName') &&
+                    getErrorsInField('fullName').map(errorMessage => (
+                    <Text>{errorMessage}</Text>
+                    ))}
                 <TextInput
                     style={styles.input}
                     placeholder='E-mail'
@@ -87,23 +104,32 @@ export default function QuoteScreen({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                {isFieldInError('email') &&
+                    getErrorsInField('email').map(errorMessage => (
+                    <Text>{errorMessage}</Text>
+                    ))}
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
                     secureTextEntry
-                    placeholder='Password'
-                    onChangeText={(text) => setPassword(text)}
-                    value={password}
+                    placeholder='mm/dd/yyyy'
+                    onChangeText={(text) => setDate(text)}
+                    value={date}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                {isFieldInError('date') &&
+                    getErrorsInField('date').map(errorMessage => (
+                    <Text>{errorMessage}</Text>
+                    ))}
                 <TextInput
+                    id='airport'
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
                     secureTextEntry
-                    placeholder='Confirm Password'
-                    onChangeText={(text) => setConfirmPassword(text)}
-                    value={confirmPassword}
+                    placeholder='Airport'
+                    onChangeText={(text) => setdepAirPort(text)}
+                    value={depAirport}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
