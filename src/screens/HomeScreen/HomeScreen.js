@@ -28,7 +28,7 @@ export default function HomeScreen({navigation}) {
         const docRef = addDoc(collection(db, "test"), {
             name: fullName,
             email_address: email
-            });
+            })
             console.log("Document written with ID: ", docRef.id);
 
 
@@ -105,6 +105,11 @@ export default function HomeScreen({navigation}) {
                     style={styles.button}
                     onPress={() => onRegisterPress()}>
                     <Text style={styles.buttonTitle}>Create account</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('Quote')}>
+                    <Text style={styles.buttonTitle}>GO TO QUOTE PAGE</Text>
                 </TouchableOpacity>
                 
             </KeyboardAwareScrollView>
