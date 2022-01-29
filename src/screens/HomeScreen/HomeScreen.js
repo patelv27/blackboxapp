@@ -31,31 +31,6 @@ export default function HomeScreen({navigation}) {
             })
             console.log("Document written with ID: ", docRef.id);
 
-
-
-        // console.log('hi')
-        // firebase
-        //     .then((response) => {
-        //         const uid = response.user.uid
-        //         const data = {
-        //             id: uid,
-        //             email,
-        //             fullName,
-        //         };
-        //         const usersRef = firebase.firestore().collection('test')
-        //         usersRef
-        //             .doc(uid)
-        //             .set(data)
-        //             .then(() => {
-        //                 navigation.navigate('Home', {user: data})
-        //             })
-        //             .catch((error) => {
-        //                 alert(error)
-        //             });
-        //     })
-        //     .catch((error) => {
-        //         alert(error)
-        // });
     }
 
     return (
@@ -63,49 +38,7 @@ export default function HomeScreen({navigation}) {
             <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always">
-                <TextInput
-                    style={styles.input}
-                    placeholder='Full Name'
-                    placeholderTextColor="#aaaaaa"
-                    onChangeText={(text) => setFullName(text)}
-                    value={fullName}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder='E-mail'
-                    placeholderTextColor="#aaaaaa"
-                    onChangeText={(text) => setEmail(text)}
-                    value={email}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    secureTextEntry
-                    placeholder='Password'
-                    onChangeText={(text) => setPassword(text)}
-                    value={password}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    secureTextEntry
-                    placeholder='Confirm Password'
-                    onChangeText={(text) => setConfirmPassword(text)}
-                    value={confirmPassword}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => onRegisterPress()}>
-                    <Text style={styles.buttonTitle}>Create account</Text>
-                </TouchableOpacity>
+                
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => navigation.navigate('Quote')}>
