@@ -9,6 +9,8 @@ import 'firebase/compat/firestore';
 import { collection, addDoc, setDoc } from "firebase/firestore"; 
 import ValidationComponent from 'react-native-form-validator';
 import { useValidation } from 'react-native-form-validator';
+import {Picker} from '@react-native-picker/picker';
+
 //import useScript from 'hooks/useScript';
 
 
@@ -22,7 +24,20 @@ export default function QuoteScreen({navigation}) {
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
     const [date, setDate] = useState('')
+
     const [depAirport, setdepAirPort] = useState('')
+    const [phone, setPhone] = useState('')
+    const [numPassengers, setnumPassengers] = useState('')
+    const [retAirport, setretAirPort] = useState('')
+    const [passWeight, setpassWeight] = useState('')
+    const [bagWeight, setbagWeight] = useState('')
+    const [extraInfo, setextraInfo] = useState('')
+    const [retdate, setretDate] = useState('')
+    const [depTime, setdepTime] = useState('')
+    const [retTime, setretTime] = useState('')
+    const [flightType, setflightType] = useState('')
+
+
     const db = getFirestore(firebase);
 
 
@@ -133,6 +148,15 @@ export default function QuoteScreen({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <Picker
+                    selectedValue={flightType}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setflightType(itemValue)
+                    }>
+                    <Picker.Item label="One Way" value="One Way" />
+                    <Picker.Item label="Round Trip (Day Return)" value="Round Trip Day Return" />
+                    <Picker.Item label="Round Trip (Stop Over)" value="Round Trip Stop Over" />
+                </Picker>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => onRegisterPress()}>
