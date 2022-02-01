@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, Text, TextInput, TouchableOpacity, View,Platform, Button } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import { firebase } from '../../firebase/config';
@@ -10,7 +10,7 @@ import { collection, addDoc, setDoc } from "firebase/firestore";
 import ValidationComponent from 'react-native-form-validator';
 import { useValidation } from 'react-native-form-validator';
 import {Picker} from '@react-native-picker/picker';
-
+import DateTimePicker from '@react-native-community/datetimepicker';
 //import useScript from 'hooks/useScript';
 
 
@@ -23,7 +23,10 @@ import { DeprecatedAccessibilityRoles } from 'react-native/Libraries/DeprecatedP
 export default function QuoteScreen({navigation}) {
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
-    const [date, setDate] = useState('')
+    const [date, setDate] = useState(new Date(1598051730000))
+
+
+    
 
     const [depAirport, setdepAirPort] = useState('')
     const [phone, setPhone] = useState('')
@@ -32,10 +35,42 @@ export default function QuoteScreen({navigation}) {
     const [passWeight, setpassWeight] = useState('')
     const [bagWeight, setbagWeight] = useState('')
     const [extraInfo, setextraInfo] = useState('')
-    const [retdate, setretDate] = useState('')
+    const [retDate, setRetDate] = useState(new Date(1598051730000))
     const [depTime, setdepTime] = useState('')
     const [retTime, setretTime] = useState('')
     const [flightType, setflightType] = useState('')
+
+    //for datetimepicker:
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+
+    const onChangeDepDate = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'ios');
+        setDate(currentDate);
+        setTimeout()
+      };
+
+      const onChangeRetDate = (event, selectedDate) => {
+        const currentDate = selectedDate || retDate;
+        setShow(Platform.OS === 'ios');
+        setRetDate(currentDate);
+        setTimeout()
+      };
+
+    const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+    };
+
+    const showDatepicker = () => {
+    showMode('date');
+    };
+
+    const showTimepicker = () => {
+    showMode('time');
+
+    };
 
 
     const db = getFirestore(firebase);
@@ -45,6 +80,8 @@ export default function QuoteScreen({navigation}) {
     //     useScript("https://cdn.jsdelivr.net/npm/airport-autocomplete-js@latest/dist/index.browser.min.js");
     // }
 
+
+    
 
 
     const checkTextInput = () => {
@@ -73,15 +110,26 @@ export default function QuoteScreen({navigation}) {
 
         if (validate({
             fullName: { minlength: 3, maxlength: 7, required: true },
-            email: { email: true, required: true},
-            date: { date: 'MM-DD-YYYY',required: true }}    
-            ))
+            email: { email: true, required: true}
+            //date: { date: 'MM-DD-YYYY',required: true }}    
+        }))
         {
 
         
         const docRef = addDoc(collection(db, "test"), {
             name: fullName,
-            email_address: email
+            email_address: email,
+            departure_date:date,
+            phone_num:phone,
+            departure_airport:depAirport,
+            departure_date: date,
+            flight_type:flightType,
+            passenger_weight:passWeight,
+            bag_weight:bagWeight,
+            num_passengers:numPassengers,
+            extra_info:extraInfo,
+            return_date:retDate,
+            return_airport:retAirport,
             })
             console.log("Document written with ID: ", docRef.id);
         navigation.navigate('Home');
@@ -123,26 +171,66 @@ export default function QuoteScreen({navigation}) {
                     getErrorsInField('email').map(errorMessage => (
                     <Text>{errorMessage}</Text>
                     ))}
+
                 <TextInput
                     style={styles.input}
+                    placeholder='Phone Number'
                     placeholderTextColor="#aaaaaa"
-                    secureTextEntry
-                    placeholder='mm/dd/yyyy'
-                    onChangeText={(text) => setDate(text)}
-                    value={date}
+                    onChangeText={(text) => setPhone(text)}
+                    value={phone}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
-                {isFieldInError('date') &&
-                    getErrorsInField('date').map(errorMessage => (
-                    <Text>{errorMessage}</Text>
-                    ))}
+                <View>
+                    <View>
+                        <Button onPress={showDatepicker} title="Departure date picker!" />
+                    </View>
+                    <View>
+                        <Button onPress={showTimepicker} title="Departure time picker!" />
+                    </View>
+                    {show && (
+                        <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode={mode}
+                        is24Hour={true}
+                        display="default"
+                        onChange={onChangeDepDate}
+                        />
+                    )}
+                </View>
+                <TextInput
+                    style={styles.input}
+                    placeholderTextColor="#aaaaaa"
+                    placeholder='Number of Passengers'
+                    onChangeText={(text) => setnumPassengers(text)}
+                    value={numPassengers}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholderTextColor="#aaaaaa"
+                    placeholder='Passenger Weight'
+                    onChangeText={(text) => setpassWeight(text)}
+                    value={passWeight}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholderTextColor="#aaaaaa"
+                    placeholder='Bag Weight'
+                    onChangeText={(text) => setbagWeight(text)}
+                    value={bagWeight}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
                 <TextInput
                     id='airport'
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
-                    secureTextEntry
-                    placeholder='Airport'
+                    placeholder='Departure Airport'
                     onChangeText={(text) => setdepAirPort(text)}
                     value={depAirport}
                     underlineColorAndroid="transparent"
@@ -157,6 +245,42 @@ export default function QuoteScreen({navigation}) {
                     <Picker.Item label="Round Trip (Day Return)" value="Round Trip Day Return" />
                     <Picker.Item label="Round Trip (Stop Over)" value="Round Trip Stop Over" />
                 </Picker>
+                <TextInput
+                    style={styles.input}
+                    placeholderTextColor="#aaaaaa"
+                    placeholder='Return Airport'
+                    onChangeText={(text) => setretAirPort(text)}
+                    value={retAirport}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+                <View>
+                    <View>
+                        <Button onPress={showDatepicker} title="Return date picker!" />
+                    </View>
+                    <View>
+                        <Button onPress={showTimepicker} title="Return time picker!" />
+                    </View>
+                    {show && (
+                        <DateTimePicker
+                        testID="dateTimePicker"
+                        value={retDate}
+                        mode={mode}
+                        is24Hour={true}
+                        display="default"
+                        onChange={onChangeRetDate}
+                        />
+                    )}
+                </View>
+                <TextInput
+                    style={styles.input}
+                    placeholderTextColor="#aaaaaa"
+                    placeholder='Extra Info'
+                    onChangeText={(text) => setextraInfo(text)}
+                    value={extraInfo}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => onRegisterPress()}>

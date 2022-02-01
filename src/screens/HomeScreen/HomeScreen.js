@@ -44,6 +44,21 @@ export default function HomeScreen({navigation}) {
                     onPress={() => navigation.navigate('Quote')}>
                     <Text style={styles.buttonTitle}>GO TO QUOTE PAGE</Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('Quote')}>
+                    <Text style={styles.buttonTitle}>UPDATE YOUR CITY</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('Quote')}>
+                    <Text style={styles.buttonTitle}>GENESIS MEMBER SIGN UP</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('Quote')}>
+                    <Text style={styles.buttonTitle}>OUR LINKS</Text>
+                </TouchableOpacity>
                 
             </KeyboardAwareScrollView>
         </View>
