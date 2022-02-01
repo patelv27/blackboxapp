@@ -23,7 +23,7 @@ import { DeprecatedAccessibilityRoles } from 'react-native/Libraries/DeprecatedP
 export default function QuoteScreen({navigation}) {
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
-    const [date, setDate] = useState(new Date(1598051730000))
+    const [date, setDate] = useState(new Date())
 
 
     
@@ -35,9 +35,8 @@ export default function QuoteScreen({navigation}) {
     const [passWeight, setpassWeight] = useState('')
     const [bagWeight, setbagWeight] = useState('')
     const [extraInfo, setextraInfo] = useState('')
-    const [retDate, setRetDate] = useState(new Date(1598051730000))
-    const [depTime, setdepTime] = useState('')
-    const [retTime, setretTime] = useState('')
+    const [retDate, setRetDate] = useState(new Date())
+    
     const [flightType, setflightType] = useState('')
 
     //for datetimepicker:
@@ -81,23 +80,7 @@ export default function QuoteScreen({navigation}) {
     // }
 
 
-    
 
-
-    const checkTextInput = () => {
-
-        if (!fullName.trim()) {
-            alert('Fill out all required fields before submitting');
-            return false;
-          }
-        
-        if (!email.trim()) {
-            alert('Fill out all required fields before submitting');
-            return false;
-        }
-
-        return true;
-    }
 
     const { validate, isFieldInError, getErrorsInField, getErrorMessages} = useValidation({
         state: { email, fullName, date},
@@ -195,7 +178,7 @@ export default function QuoteScreen({navigation}) {
                         mode={mode}
                         is24Hour={true}
                         display="default"
-                        onChange={onChangeDepDate}
+                        onChange={() => onChangeDepDate}
                         />
                     )}
                 </View>
@@ -263,12 +246,12 @@ export default function QuoteScreen({navigation}) {
                     </View>
                     {show && (
                         <DateTimePicker
-                        testID="dateTimePicker"
+                        testID="returnDateTimePicker"
                         value={retDate}
                         mode={mode}
                         is24Hour={true}
                         display="default"
-                        onChange={onChangeRetDate}
+                        onChange={() => onChangeRetDate}
                         />
                     )}
                 </View>
