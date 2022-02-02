@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useRef } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View,Platform, Button } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
@@ -12,6 +13,7 @@ import { useValidation } from 'react-native-form-validator';
 import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 //import useScript from 'hooks/useScript';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 
 
@@ -39,6 +41,16 @@ export default function QuoteScreen({navigation}) {
     
     const [flightType, setflightType] = useState('')
 
+
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(null);
+    const [items, setItems] = useState([
+        {label: 'One Way', value: 'one way'},
+        {label: 'Return Trip (Day Return)', value: 'return trip day return'},
+        {label: 'Return Trip (Stop Over)', value: 'return trip stop over'}
+
+    ]);
+
     //for datetimepicker:
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
@@ -50,12 +62,12 @@ export default function QuoteScreen({navigation}) {
         setTimeout()
       };
 
-      const onChangeRetDate = (event, selectedDate) => {
-        const currentDate = selectedDate || retDate;
-        setShow(Platform.OS === 'ios');
-        setRetDate(currentDate);
-        setTimeout()
-      };
+    const onChangeRetDate = (event, selectedDate) => {
+    const currentDate = selectedDate || retDate;
+    setShow(Platform.OS === 'ios');
+    setRetDate(currentDate);
+    setTimeout()
+    };
 
     const showMode = (currentMode) => {
     setShow(true);
@@ -86,6 +98,16 @@ export default function QuoteScreen({navigation}) {
         state: { email, fullName, date},
       });
 
+
+    const pickerRef = useRef();
+
+    function pickerOpen() {
+    pickerRef.current.focus();
+    }
+    
+    function pickerClose() {
+    pickerRef.current.blur();
+    }
 
   
 
@@ -167,6 +189,7 @@ export default function QuoteScreen({navigation}) {
                 <View>
                     <View>
                         <Button onPress={showDatepicker} title="Departure date picker!" />
+                        
                     </View>
                     <View>
                         <Button onPress={showTimepicker} title="Departure time picker!" />
@@ -219,15 +242,19 @@ export default function QuoteScreen({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+
                 <Picker
+                    ref={pickerRef}
+                    itemStyle={styles.picker}
                     selectedValue={flightType}
                     onValueChange={(itemValue, itemIndex) =>
                         setflightType(itemValue)
+
                     }>
                     <Picker.Item label="One Way" value="One Way" />
                     <Picker.Item label="Round Trip (Day Return)" value="Round Trip Day Return" />
                     <Picker.Item label="Round Trip (Stop Over)" value="Round Trip Stop Over" />
-                </Picker>
+                </Picker> 
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
@@ -264,6 +291,8 @@ export default function QuoteScreen({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+
+                
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => onRegisterPress()}>
