@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import { useRef } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View,Platform, Button } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -14,20 +14,35 @@ import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 //import useScript from 'hooks/useScript';
 import DropDownPicker from 'react-native-dropdown-picker';
+import 'airport-autocomplete-js';
+//import AirportInput from "airport-autocomplete-js";
+import Fuse from 'fuse.js'
+//import AirportStuff from './components';
+import { WebView } from 'react-native-webview';
 
 
-
-
-
+// AirportStuff.AirportInput('autocomplete-airport-1');
 import { getFirestore } from "firebase/firestore"
 import { DeprecatedAccessibilityRoles } from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedViewAccessibility';
 
+// class AirportStuff extends Component {
+//     constructor(props){
+//         super(props);
+//         this.airport = new AirportInput();
+//       }
+// }
+// export default class AirportInfo extends React {
+//     constructor(props) {
+//         super(props);
+//         this.airportInfo = AirportInput("autocomplete-airport-1");
+//       }
+// }
 export default function QuoteScreen({navigation}) {
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
     const [date, setDate] = useState(new Date())
 
-
+    //AirportStuff('autocomplete-airport-1');
     
 
     const [depAirport, setdepAirPort] = useState('')
@@ -50,6 +65,39 @@ export default function QuoteScreen({navigation}) {
         {label: 'Return Trip (Stop Over)', value: 'return trip stop over'}
 
     ]);
+
+
+    const runFirst = `
+    setTimeout(function() { window.alert('hi')) }, 2000);
+    true;
+    `;
+
+
+    const html = `
+      <html>
+      <head></head>
+      <body>
+      <div class="col span_1_of_5" style="text-align: center">
+      <input type="text" id="autocomplete-airport-1" class="inp" placeholder="Flight from" onchange="checkDistance(this)">
+      <span class="border"></span>
+        <script src="https://cdn.jsdelivr.net/npm/airport-autocomplete-js@latest/dist/index.browser.min.js"></script>
+        <script>
+          setTimeout(function () {
+            window.ReactNativeWebView.postMessage("Hello!")
+          }, 2000)
+          AirportInput('autocomplete-airport-1')
+          
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/airport-autocomplete-js@latest/dist/index.browser.min.js"></script>
+
+        
+      </body>
+      </html>
+    `;
+
+    // setTimeout(() => {
+    //      this.webref.injectJavaScript(runFirst);
+    //    }, 100);
 
     //for datetimepicker:
     const [mode, setMode] = useState('date');
@@ -83,7 +131,20 @@ export default function QuoteScreen({navigation}) {
 
     };
 
+    const air = (parameter) => { return { parameter: parameter } }
 
+
+    const codeStr = `
+    <script type="text/javascript" src="./components.js"></script> 
+    <div id='airport-autocomplete>
+        <div class="form-group">
+            <label class="control-label">Enter an Airport</label>
+            <input id="autocomplete" type="text" />
+        </div>                
+  </div>
+`
+
+    //const here= new AirportInput('autocomplete-airport-1');
     const db = getFirestore(firebase);
 
 
@@ -109,7 +170,7 @@ export default function QuoteScreen({navigation}) {
     pickerRef.current.blur();
     }
 
-  
+   //<div style={styles.input} dangerouslySetInnerHTML={{ __html: codeStr }}>
 
     const onRegisterPress = () => {
 
@@ -145,7 +206,7 @@ export default function QuoteScreen({navigation}) {
         
     return ( 
 
-
+        
         <View style={styles.container}>
             <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
@@ -177,6 +238,18 @@ export default function QuoteScreen({navigation}) {
                     <Text>{errorMessage}</Text>
                     ))}
 
+                
+                <WebView 
+                    style={styles.input} 
+                    source={{html}}
+                    originWhitelist={['*']}
+                    javaScriptEnabled={true}
+                    injectedJavaScript={runFirst}
+                    onMessage={(event) => {
+                        alert(event.nativeEvent.data);
+                      }}
+                    >
+                </WebView>  
                 <TextInput
                     style={styles.input}
                     placeholder='Phone Number'
@@ -187,11 +260,11 @@ export default function QuoteScreen({navigation}) {
                     autoCapitalize="none"
                 />
                 <View>
-                    <View>
+                    <View style={styles.container}>
                         <Button onPress={showDatepicker} title="Departure date picker!" />
                         
                     </View>
-                    <View>
+                    <View style={styles.container}>
                         <Button onPress={showTimepicker} title="Departure time picker!" />
                     </View>
                     {show && (
