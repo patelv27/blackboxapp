@@ -4,15 +4,12 @@ import { Image, Text, TextInput, TouchableOpacity, View,Platform, Button } from 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import { firebase } from '../../firebase/config';
-// import firebase from 'firebase/compat/app';
-// import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { collection, addDoc, setDoc } from "firebase/firestore"; 
 import ValidationComponent from 'react-native-form-validator';
 import { useValidation } from 'react-native-form-validator';
 import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-//import useScript from 'hooks/useScript';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 
@@ -20,7 +17,6 @@ import DropDownPicker from 'react-native-dropdown-picker';
 
 
 import { getFirestore } from "firebase/firestore"
-import { DeprecatedAccessibilityRoles } from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedViewAccessibility';
 
 export default function QuoteScreen({navigation}) {
     const [fullName, setFullName] = useState('')
@@ -74,23 +70,24 @@ export default function QuoteScreen({navigation}) {
     setMode(currentMode);
     };
 
-    const showDatepicker = () => {
-    showMode('date');
-    };
+    const showDepDatepicker = () => {
+        showMode('datetime');
+        };
 
-    const showTimepicker = () => {
-    showMode('time');
+    const showRetDatepicker = () => {
+        showMode('datetime');
+        };
 
-    };
+    // const showTimepicker = () => {
+    // showMode('time');
+
+    // };
 
 
     const db = getFirestore(firebase);
 
 
-    // const airportnav = props => {
-    //     useScript("https://cdn.jsdelivr.net/npm/airport-autocomplete-js@latest/dist/index.browser.min.js");
-    // }
-
+   
 
 
 
@@ -186,14 +183,12 @@ export default function QuoteScreen({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
-                <View>
-                    <View>
-                        <Button onPress={showDatepicker} title="Departure date picker!" />
-                        
-                    </View>
-                    <View>
-                        <Button onPress={showTimepicker} title="Departure time picker!" />
-                    </View>
+                <View> 
+                        <TouchableOpacity 
+                        style={styles.input} 
+                        onPress={showDepDatepicker}>
+                        <Text>Pick Date</Text>
+                        </TouchableOpacity>
                     {show && (
                         <DateTimePicker
                         testID="dateTimePicker"
@@ -266,10 +261,7 @@ export default function QuoteScreen({navigation}) {
                 />
                 <View>
                     <View>
-                        <Button onPress={showDatepicker} title="Return date picker!" />
-                    </View>
-                    <View>
-                        <Button onPress={showTimepicker} title="Return time picker!" />
+                        <Button onPress={showRetDatepicker} title="Return date picker!" />
                     </View>
                     {show && (
                         <DateTimePicker
