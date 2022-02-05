@@ -46,8 +46,8 @@ export default function HomeScreen({navigation}) {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => navigation.navigate('Quote')}>
-                    <Text style={styles.buttonTitle}>UPDATE YOUR CITY</Text>
+                    onPress={() => navigation.navigate('LocalPlugContact')}>
+                    <Text style={styles.buttonTitle}>CONTACT LOCAL PLUG</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}

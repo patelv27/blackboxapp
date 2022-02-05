@@ -184,13 +184,9 @@ export default function QuoteScreen({navigation}) {
                     autoCapitalize="none"
                 />
                 <View> 
-                        <TouchableOpacity 
-                        style={styles.input} 
-                        onPress={showDepDatepicker}>
-                        <Text>Pick Date</Text>
-                        </TouchableOpacity>
-                    {show && (
+                    {(
                         <DateTimePicker
+                        style={styles.input}
                         testID="dateTimePicker"
                         value={date}
                         mode={mode}
@@ -259,14 +255,13 @@ export default function QuoteScreen({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
-                <View>
-                    <View>
-                        <Button onPress={showRetDatepicker} title="Return date picker!" />
-                    </View>
-                    {show && (
+                 <View> 
+                    {(
                         <DateTimePicker
-                        testID="returnDateTimePicker"
-                        value={retDate}
+                        style={styles.input}
+                        display="spinner"
+                        testID="returndateTimePicker"
+                        value={date}
                         mode={mode}
                         is24Hour={true}
                         display="default"
