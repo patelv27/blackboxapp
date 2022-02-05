@@ -14,9 +14,9 @@ import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 //import useScript from 'hooks/useScript';
 import DropDownPicker from 'react-native-dropdown-picker';
-
-
-
+import Autocomplete from 'react-native-autocomplete-input';
+import Papa from 'papaparse';
+import Airports from '/Users/varunpatel/Desktop/blackboxapp/airport_names.json';
 
 
 import { getFirestore } from "firebase/firestore"
@@ -26,7 +26,7 @@ export default function QuoteScreen({navigation}) {
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
     const [date, setDate] = useState(new Date())
-
+    const [query, setQuery] = useState('')
 
     
 
@@ -51,6 +51,17 @@ export default function QuoteScreen({navigation}) {
 
     ]);
 
+    const [filteredFilms, setFilteredFilms] = useState([]);
+    const [films, setFilms] = useState([]);
+
+
+    
+
+    var data = [];
+    for(var i in Airports) {
+        data.push(Airports[i]);
+    }
+    //console.log(Airports);
     //for datetimepicker:
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
@@ -87,9 +98,20 @@ export default function QuoteScreen({navigation}) {
     const db = getFirestore(firebase);
 
 
-    // const airportnav = props => {
-    //     useScript("https://cdn.jsdelivr.net/npm/airport-autocomplete-js@latest/dist/index.browser.min.js");
-    // }
+    const findFilm = (query) => {
+        // Method called every time when we change the value of the input
+        if (query) {
+          // Making a case insensitive regular expression
+          const regex = new RegExp(`${query.trim()}`, 'i');
+          // Setting the filtered film array according the query
+          setFilteredFilms(
+              films.filter((film) => film.title.search(regex) >= 0)
+          );
+        } else {
+          // If the query is null then return blank
+          setFilteredFilms([]);
+        }
+      };
 
 
 
@@ -232,6 +254,35 @@ export default function QuoteScreen({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+            <View>
+            <Autocomplete
+                autoCapitalize="none"
+                autoCorrect={false}
+                containerStyle={styles.container}
+                //data to show in suggestion
+                data={data}
+                //default value if you want to set something in input
+                defaultValue={
+                 "None"
+                }
+                // onchange of the text changing the state of the query
+                // which will trigger the findFilm method
+                // to show the suggestions
+                onChangeText={(text) => findFilm(text)}
+                placeholder="Enter the film title"
+                renderItem={({item}) => (
+                  //you can change the view you want to show in suggestions
+                  <TouchableOpacity
+                      onPress={() => {
+                      setQuery(item);
+                      }}>
+                      <Text>
+                          {item.title}
+                      </Text>
+                  </TouchableOpacity>
+                  )}
+                />
+            </View>
                 <TextInput
                     id='airport'
                     style={styles.input}

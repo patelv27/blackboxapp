@@ -10,6 +10,9 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@mui/material": "^5.4.0",
     "@react-native-community/datetimepicker": "^5.1.0",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-firebase/app": "^14.3.0",
@@ -26,6 +29,7 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
+    "react-native-autocomplete-input": "^5.0.2",
     "react-native-dropdown-picker": "^5.3.0",
     "react-native-form-validator": "^0.5.1",
     "react-native-gesture-handler": "~2.1.0",
@@ -33,7 +37,8 @@
     "react-native-reanimated": "~2.3.1",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
-    "react-native-web": "0.17.1"
+    "react-native-web": "0.17.1",
+    "react-papaparse": "^4.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
