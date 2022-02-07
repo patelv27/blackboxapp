@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useRef } from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View,Platform, Button } from 'react-native'
+import { Image, Text, TextInput, TouchableOpacity, View,Platform, Button,Pressables, Pressable } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import { firebase } from '../../firebase/config';
@@ -27,6 +27,11 @@ export default function LocalPlugContact({navigation}) {
 
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
 
+    const [restaurants, setRestaurants] = useState(false);
+    const [nightlife, setNightlife] = useState(false);
+    const [lodging, setLodging] = useState(false);
+    const [connections, setConnections] = useState(false);
+
 
     const data = [
         {
@@ -46,6 +51,7 @@ export default function LocalPlugContact({navigation}) {
         },
         ];
 
+        
 
 
 
@@ -57,11 +63,8 @@ export default function LocalPlugContact({navigation}) {
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always">
                
-               <CheckBox
-    disabled={false}
-    value={toggleCheckBox}
-    onValueChange={(newValue) => setToggleCheckBox(newValue)}
-  />
+    
+                
               
                 <TextInput
                     style={styles.input}
@@ -72,10 +75,30 @@ export default function LocalPlugContact({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
-                <RadioButtonRN
-                    data={data}
-                    selectedBtn={(e) => console.log(e)}
-                    />
+
+                <TouchableOpacity
+                        onPress={() => setRestaurants(!restaurants)}
+                        style={[styles.button, { backgroundColor: restaurants ? "red" : "transparent" }]}>
+                        <Text>Restaurants/Reservations</Text>
+                </TouchableOpacity>
+
+
+                <TouchableOpacity
+                        onPress={() => setNightlife(!nightlife)}
+                        style={[styles.button, { backgroundColor: nightlife ? "red" : "transparent" }]}>
+                        <Text>Nightlife/Bottle Service</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                        onPress={() => setConnections(!connections)}
+                        style={[styles.button, { backgroundColor: connections ? "red" : "transparent" }]}>
+                        <Text>Connections/Local Plugs</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                        onPress={() => setLodging(!lodging)}
+                        style={[styles.button, { backgroundColor: lodging ? "red" : "transparent" }]}>
+                        <Text>Lodging/Shared Work Spaces</Text>
+                </TouchableOpacity>
                  <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
