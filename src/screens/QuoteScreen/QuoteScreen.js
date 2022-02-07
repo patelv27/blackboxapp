@@ -8,9 +8,9 @@ import 'firebase/compat/firestore';
 import { collection, addDoc, setDoc } from "firebase/firestore"; 
 import ValidationComponent from 'react-native-form-validator';
 import { useValidation } from 'react-native-form-validator';
-import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
+import RNPickerSelect from 'react-native-picker-select';
 
 
 
@@ -234,18 +234,17 @@ export default function QuoteScreen({navigation}) {
                     autoCapitalize="none"
                 />
 
-                <Picker
-                    ref={pickerRef}
-                    itemStyle={styles.picker}
-                    selectedValue={flightType}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setflightType(itemValue)
 
-                    }>
-                    <Picker.Item label="One Way" value="One Way" />
-                    <Picker.Item label="Round Trip (Day Return)" value="Round Trip Day Return" />
-                    <Picker.Item label="Round Trip (Stop Over)" value="Round Trip Stop Over" />
-                </Picker> 
+                <RNPickerSelect
+                    style={styles.input}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setflightType(itemValue)}
+                    items={[
+                        { label:"One Way", value:"One Way" },
+                        { label:"Round Trip (Day Return)", value:"Round Trip Day Return" },
+                        { label: "Round Trip (Stop Over)", value: 'Round Trip Stop Over' },
+                    ]}
+                />
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"

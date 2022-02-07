@@ -8,7 +8,7 @@ import 'firebase/compat/firestore';
 import { collection, addDoc, setDoc } from "firebase/firestore"; 
 import ValidationComponent from 'react-native-form-validator';
 import { useValidation } from 'react-native-form-validator';
-import {Picker} from '@react-native-picker/picker';
+//import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { getFirestore } from "firebase/firestore"
@@ -25,35 +25,44 @@ export default function LocalPlugContact({navigation}) {
     const [discord,setDiscord] = useState('')
 
 
-    const [toggleCheckBox, setToggleCheckBox] = useState(false)
-
+    const db = getFirestore(firebase);
     const [restaurants, setRestaurants] = useState(false);
     const [nightlife, setNightlife] = useState(false);
     const [lodging, setLodging] = useState(false);
     const [connections, setConnections] = useState(false);
 
+    const { validate, isFieldInError, getErrorsInField, getErrorMessages} = useValidation({
+        state: { email, name},
+      });
 
-    const data = [
+    const onLocalPlugRegisterPress = () => {
+
+        if (validate({
+            name: { maxlength: 7, required: true },
+            email: { email: true, required: true}
+            //date: { date: 'MM-DD-YYYY',required: true }}    
+        }))
         {
-          label: 'Restaurants/Reservations'
-         },
-         {
-          label: 'Nightlife/Bottle Service'
-         },
-         {
-            label: 'Connections/Local Plugs'
-        },
-        {
-            label: 'Lodging/Shared Work Space'
-        },
-        {
-            label: 'Other-please Note in Additional Info'
-        },
-        ];
 
         
+        const docRef = addDoc(collection(db, "test"), {
+            first_name: name,
+            email_address: email,
+            discord_address:discord,
+            city_name:city,
+            phone_number:phone,
+            extra_info:addlInfo,
+            some_restaurants:restaurants,
+            some_lodging:lodging,
+            some_connections:connections,
+            some_nightlife:nightlife,
+            })
+            console.log("Document written with ID: ", docRef.id);
+        navigation.navigate('Home');
+        alert("Successfully submitted!");
 
-
+        }
+    }
 
     return ( 
 
@@ -72,6 +81,25 @@ export default function LocalPlugContact({navigation}) {
                     placeholder='Name'
                     onChangeText={(text) => setName(text)}
                     value={name}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+
+                <TextInput
+                    style={styles.input}
+                    placeholderTextColor="#aaaaaa"
+                    placeholder='City'
+                    onChangeText={(text) => setCity(text)}
+                    value={city}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholderTextColor="#aaaaaa"
+                    placeholder='Discord'
+                    onChangeText={(text) => setDiscord(text)}
+                    value={discord}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
@@ -130,7 +158,7 @@ export default function LocalPlugContact({navigation}) {
                 
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => onRegisterPress()}>
+                    onPress={() => onLocalPlugRegisterPress()}>
                     <Text style={styles.buttonTitle}>Submit</Text>
                 </TouchableOpacity>
             </KeyboardAwareScrollView>
