@@ -15,7 +15,7 @@ import { getFirestore } from "firebase/firestore"
 import RadioButtonRN from 'radio-buttons-react-native';
 import CheckBox from '@react-native-community/checkbox';
 
-export default function LocalPlugContact({navigation}) {
+export default function TravelPlanning({navigation}) {
     const [city, setCity] = useState('')
     const [tripExtras,setTripExtras] = useState('')
     const [addlInfo,setaddlInfo] = useState('')

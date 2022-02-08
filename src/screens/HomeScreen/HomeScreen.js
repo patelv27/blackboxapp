@@ -47,12 +47,12 @@ export default function HomeScreen({navigation}) {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => navigation.navigate('LocalPlugContact')}>
-                    <Text style={styles.buttonTitle}>CONTACT LOCAL PLUG</Text>
+                    <Text style={styles.buttonTitle}>BECOME A LOCAL PLUG</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => navigation.navigate('Quote')}>
-                    <Text style={styles.buttonTitle}>GENESIS MEMBER SIGN UP</Text>
+                    onPress={() => navigation.navigate('TravelPlanning')}>
+                    <Text style={styles.buttonTitle}>TRAVEL PLANNING</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
