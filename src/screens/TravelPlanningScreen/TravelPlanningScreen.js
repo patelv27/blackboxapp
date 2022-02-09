@@ -14,16 +14,15 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { getFirestore } from "firebase/firestore"
 import RadioButtonRN from 'radio-buttons-react-native';
 import CheckBox from '@react-native-community/checkbox';
+import AddGuest from './addGuest';
 
 export default function TravelPlanning({navigation}) {
     const [city, setCity] = useState('')
-    const [tripExtras,setTripExtras] = useState('')
-    const [addlInfo,setaddlInfo] = useState('')
-    const [phone,setPhone] = useState('')
     const [name, setName] = useState('')
-    const [email,setEmail] = useState('')
-    const [discord,setDiscord] = useState('')
-
+    
+    const [street, setStreet] = useState('')
+    const [state, setState] = useState('')
+    const [postal, setPostal] = useState('')
 
     const db = getFirestore(firebase);
     const [restaurants, setRestaurants] = useState(false);
@@ -31,15 +30,37 @@ export default function TravelPlanning({navigation}) {
     const [lodging, setLodging] = useState(false);
     const [connections, setConnections] = useState(false);
 
+
+
+    const [formValues, setFormValues] = useState([{ name: "", email : ""}])
+
+    let handleChange = (i, e) => {
+        let newFormValues = [...formValues];
+        newFormValues[i][e.target.name] = e.target.value;
+        setFormValues(newFormValues);
+      }
+    
+    let addFormFields = () => {
+        setFormValues([...formValues, { name: "", street: "" ,city:"",state:""}])
+      }
+    
+    let removeFormFields = (i) => {
+        let newFormValues = [...formValues];
+        newFormValues.splice(i, 1);
+        setFormValues(newFormValues)
+    }
+
+
+
+
     const { validate, isFieldInError, getErrorsInField, getErrorMessages} = useValidation({
-        state: { email, name},
+        state: { name},
       });
 
-    const onLocalPlugRegisterPress = () => {
+    const onTravelPlanningSubmitPress = () => {
 
         if (validate({
             name: { maxlength: 7, required: true },
-            email: { email: true, required: true}
             //date: { date: 'MM-DD-YYYY',required: true }}    
         }))
         {
@@ -75,17 +96,24 @@ export default function TravelPlanning({navigation}) {
                
     
                 
-              
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
-                    placeholder='Name'
+                    placeholder='Guest 1 Full Name'
                     onChangeText={(text) => setName(text)}
                     value={name}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
-
+                <TextInput
+                    style={styles.input}
+                    placeholderTextColor="#aaaaaa"
+                    placeholder='Street Address'
+                    onChangeText={(text) => setStreet(text)}
+                    value={street}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
@@ -98,63 +126,23 @@ export default function TravelPlanning({navigation}) {
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
-                    placeholder='Discord'
-                    onChangeText={(text) => setDiscord(text)}
-                    value={discord}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-
-                <TouchableOpacity
-                        onPress={() => setRestaurants(!restaurants)}
-                        style={[styles.button, { backgroundColor: restaurants ? "red" : "transparent" }]}>
-                        <Text>Restaurants/Reservations</Text>
-                </TouchableOpacity>
-
-
-                <TouchableOpacity
-                        onPress={() => setNightlife(!nightlife)}
-                        style={[styles.button, { backgroundColor: nightlife ? "red" : "transparent" }]}>
-                        <Text>Nightlife/Bottle Service</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                        onPress={() => setConnections(!connections)}
-                        style={[styles.button, { backgroundColor: connections ? "red" : "transparent" }]}>
-                        <Text>Connections/Local Plugs</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                        onPress={() => setLodging(!lodging)}
-                        style={[styles.button, { backgroundColor: lodging ? "red" : "transparent" }]}>
-                        <Text>Lodging/Shared Work Spaces</Text>
-                </TouchableOpacity>
-                 <TextInput
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    placeholder='Email'
-                    onChangeText={(text) => setEmail(text)}
-                    value={email}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                 <TextInput
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    placeholder='Phone'
-                    onChangeText={(text) => setPhone(text)}
-                    value={phone}
+                    placeholder='State'
+                    onChangeText={(text) => setState(text)}
+                    value={state}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
-                    placeholder='Extra Info'
-                    onChangeText={(text) => setaddlInfo(text)}
-                    value={addlInfo}
+                    placeholder='ZIP Code'
+                    onChangeText={(text) => setPostal(text)}
+                    value={postal}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <AddGuest></AddGuest>
+                
 
                 
                 <TouchableOpacity
