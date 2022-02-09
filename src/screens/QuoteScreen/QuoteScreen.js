@@ -48,7 +48,7 @@ export default function QuoteScreen({navigation}) {
     ]);
 
     //for datetimepicker:
-    const [mode, setMode] = useState('date');
+    const [mode, setMode] = useState('datetime');
     const [show, setShow] = useState(false);
 
     const onChangeDepDate = (event, selectedDate) => {

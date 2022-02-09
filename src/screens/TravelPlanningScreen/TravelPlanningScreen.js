@@ -19,10 +19,12 @@ import AddGuest from './addGuest';
 export default function TravelPlanning({navigation}) {
     const [city, setCity] = useState('')
     const [name, setName] = useState('')
-    
+    const [bday, setBday] = useState(new Date())
     const [street, setStreet] = useState('')
     const [state, setState] = useState('')
     const [postal, setPostal] = useState('')
+
+    //const [myText, setMyText] = useState("");
 
     const db = getFirestore(firebase);
     const [restaurants, setRestaurants] = useState(false);
@@ -31,25 +33,22 @@ export default function TravelPlanning({navigation}) {
     const [connections, setConnections] = useState(false);
 
 
-
-    const [formValues, setFormValues] = useState([{ name: "", email : ""}])
-
-    let handleChange = (i, e) => {
-        let newFormValues = [...formValues];
-        newFormValues[i][e.target.name] = e.target.value;
-        setFormValues(newFormValues);
-      }
     
-    let addFormFields = () => {
-        setFormValues([...formValues, { name: "", street: "" ,city:"",state:""}])
-      }
+    // useEffect(() => {
+    //     // Update the document title using the browser API
+    //     myText=setMyText(bday.toDateString());
+    //   }, [bday]);
     
-    let removeFormFields = (i) => {
-        let newFormValues = [...formValues];
-        newFormValues.splice(i, 1);
-        setFormValues(newFormValues)
-    }
 
+
+    
+
+    const onChangeGuest1Bday = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'ios');
+        setBday(currentDate);
+        setTimeout()
+      };
 
 
 
@@ -140,6 +139,21 @@ export default function TravelPlanning({navigation}) {
                     value={postal}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
+                />
+                {/* <Text onChange={useEffect(() => {
+        // Update the document title using the browser API
+        myText=setMyText(bday.toDateString());
+      }, [bday])}>
+                    {myText}
+                </Text> */}
+                <DateTimePicker
+                style={styles.input}
+                testID="Guest1BdayPicker"
+                value={bday}
+                mode="date"
+                is24Hour={true}
+                display="default"
+                onChange={() => onChangeGuest1Bday}
                 />
                 <AddGuest></AddGuest>
                 
