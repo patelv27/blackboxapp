@@ -37,7 +37,11 @@ export default function QuoteScreen({navigation}) {
     const [retDate, setRetDate] = useState(new Date())
     
 
-    const [depCity, setDepCity] = useState('')
+    const [depCity, setDepCity] = useState({lat:"", lng:""})
+    useEffect(() => {
+        console.log(depCity)
+      }, [depCity])
+    const [arrCity, setArrCity] = useState({lat:"", lng:""})
     const [reason, setReason] = useState('')
     const [flightType, setflightType] = useState('')
 
@@ -256,7 +260,7 @@ export default function QuoteScreen({navigation}) {
                 fetchDetails={true}
                 onPress={(data, details = null) => {
                     // 'details' is provided when fetchDetails = true
-                    setDepCity(JSON.stringify(details.geometry.location));
+                    setDepCity((details?.geometry?.location));
                 }}
                 query={{
                     key: 'AIzaSyAcyD9XhD8P2Ic0uJRobUZewWkg5Ioma2Q',
