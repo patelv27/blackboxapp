@@ -10,11 +10,12 @@ import ValidationComponent from 'react-native-form-validator';
 import { useValidation } from 'react-native-form-validator';
 //import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import DropDownPicker from 'react-native-dropdown-picker';
+//import DropDownPicker from 'react-native-dropdown-picker';
 import { getFirestore } from "firebase/firestore"
 import RadioButtonRN from 'radio-buttons-react-native';
 import CheckBox from '@react-native-community/checkbox';
 import AddGuest from './addGuest';
+import RNPickerSelect from 'react-native-picker-select';
 
 export default function TravelPlanning({navigation}) {
     const [city, setCity] = useState('')
@@ -22,8 +23,22 @@ export default function TravelPlanning({navigation}) {
     const [bday, setBday] = useState(new Date())
     const [street, setStreet] = useState('')
     const [state, setState] = useState('')
+    const [budget, setBudget] = useState('')
     const [postal, setPostal] = useState('')
+    const [passport,setPassport] = useState('')
+    const [departureCity,setDepartureCity] = useState('')
+    const [arrivalCity,setArrivalCity] = useState('')
+    const [luggage,setLuggage] = useState('')
+    const [pets,setPets] = useState('')
+    const [addlTravellers,setAddlTravellers] = useState('')
+    const [hotel,setHotel] = useState('')
+    const [resort,setResort] = useState('')
 
+    const [flights, setFlights] = useState(false);
+    const [needHotel, setNeedHotel] = useState(false);
+    const [excursions, setExcursions] = useState(false);
+    const [cruises, setCruises] = useState(false);
+    const [rental, setRental] = useState(false);
     //const [myText, setMyText] = useState("");
 
     const db = getFirestore(firebase);
@@ -154,6 +169,157 @@ export default function TravelPlanning({navigation}) {
                 is24Hour={true}
                 display="default"
                 onChange={() => onChangeGuest1Bday}
+                />
+                <RNPickerSelect
+                    value={passport}
+                    placeholder={{ label: "Has Passport?", value: "Choose Item" }}
+                    style={
+                    {inputIOS:{height: 48,
+                        borderRadius: 5,
+                        overflow: 'hidden',
+                        backgroundColor: 'white',
+                        marginTop: 10,
+                        marginBottom: 10,
+                        marginLeft: 30,
+                        marginRight: 30,
+                        paddingLeft: 16}}}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setPassport(itemValue)}
+                    items={[
+                        { label:"Yes", value:"Yes" },
+                        { label:"No", value:"No" },
+                        { label: "In the process", value: "In the process" },
+                    ]}
+                />
+                 <TextInput
+                    style={styles.input}
+                    placeholderTextColor="#aaaaaa"
+                    placeholder='Departure City'
+                    onChangeText={(text) => setDepartureCity(text)}
+                    value={departureCity}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+                 <TextInput
+                    style={styles.input}
+                    placeholderTextColor="#aaaaaa"
+                    placeholder='Arrival City'
+                    onChangeText={(text) => setArrivalCity(text)}
+                    value={arrivalCity}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+                <TouchableOpacity
+                        onPress={() => setNeedHotel(!needHotel)}
+                        style={[styles.button, { backgroundColor: needHotel ? "red" : "transparent" }]}>
+                        <Text>Hotel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                        onPress={() => setCruises(!cruises)}
+                        style={[styles.button, { backgroundColor: cruises ? "red" : "transparent" }]}>
+                        <Text>Cruises</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                        onPress={() => setRental(!rental)}
+                        style={[styles.button, { backgroundColor: rental ? "red" : "transparent" }]}>
+                        <Text>Rental Car</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                        onPress={() => setExcursions(!excursions)}
+                        style={[styles.button, { backgroundColor: excursions ? "red" : "transparent" }]}>
+                        <Text>Excursions</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                        onPress={() => setFlights(!flights)}
+                        style={[styles.button, { backgroundColor: flights ? "red" : "transparent" }]}>
+                        <Text>Connecting Flights</Text>
+                </TouchableOpacity>
+                <TextInput
+                style={styles.input}
+                placeholderTextColor="#aaaaaa"
+                placeholder='Additional Guests'
+                onChangeText={(text) => setAddlTravellers(text)}
+                value={addlTravellers}
+                underlineColorAndroid="transparent"
+                autoCapitalize="none"
+                />
+                <TextInput
+                style={styles.input}
+                placeholderTextColor="#aaaaaa"
+                placeholder='Additional Guests'
+                onChangeText={(text) => setAddlTravellers(text)}
+                value={addlTravellers}
+                underlineColorAndroid="transparent"
+                autoCapitalize="none"
+                />
+                <TextInput
+                style={styles.input}
+                placeholderTextColor="#aaaaaa"
+                placeholder='Estimated Budget'
+                onChangeText={(text) => setBudget(text)}
+                value={budget}
+                underlineColorAndroid="transparent"
+                autoCapitalize="none"
+                />
+                <RNPickerSelect
+                    value={hotel}
+                    placeholder={{ label: "Choose Hotel Type", value: "Choose Item" }}
+                    style={
+                    {inputIOS:{height: 48,
+                        borderRadius: 5,
+                        overflow: 'hidden',
+                        backgroundColor: 'white',
+                        marginTop: 10,
+                        marginBottom: 10,
+                        marginLeft: 30,
+                        marginRight: 30,
+                        paddingLeft: 16}}}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setHotel(itemValue)}
+                    items={[
+                        { label:"5 Star", value:"5 Star" },
+                        { label:"4 Star", value:"4 Star" },
+                        { label: "3 Star", value: "3 Star" },
+                    ]}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholderTextColor="#aaaaaa"
+                    placeholder='Pets–What Type, How Many, and Weight for Each'
+                    onChangeText={(text) => setPets(text)}
+                    value={pets}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholderTextColor="#aaaaaa"
+                    placeholder='Luggage Types and Weight?'
+                    onChangeText={(text) => setLuggage(text)}
+                    value={luggage}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+                <RNPickerSelect
+                    value={resort}
+                    placeholder={{ label: "All inclusive resort", value: "Choose Item" }}
+                    style={
+                    {inputIOS:{height: 48,
+                        borderRadius: 5,
+                        overflow: 'hidden',
+                        backgroundColor: 'white',
+                        marginTop: 10,
+                        marginBottom: 10,
+                        marginLeft: 30,
+                        marginRight: 30,
+                        paddingLeft: 16}}}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setResort(itemValue)}
+                    items={[
+                        { label:"Yes", value:"yes" },
+                        { label:"No", value:"no" },
+                        { label: "No Preference", value: "no preference" },
+                    ]}
                 />
                 <AddGuest></AddGuest>
                 

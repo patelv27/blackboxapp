@@ -9,10 +9,11 @@ import { collection, addDoc, setDoc } from "firebase/firestore";
 import ValidationComponent from 'react-native-form-validator';
 import { useValidation } from 'react-native-form-validator';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import DropDownPicker from 'react-native-dropdown-picker';
+//import DropDownPicker from 'react-native-dropdown-picker';
 import RNPickerSelect from 'react-native-picker-select';
-
-
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ListItem } from 'native-base';
 
 
 
@@ -24,8 +25,8 @@ export default function QuoteScreen({navigation}) {
     const [date, setDate] = useState(new Date())
 
 
-    
-
+    const [pets, setPets] = useState('')
+    const [aircraftType, setAirCraftType] = useState('')
     const [depAirport, setdepAirPort] = useState('')
     const [phone, setPhone] = useState('')
     const [numPassengers, setnumPassengers] = useState('')
@@ -35,17 +36,11 @@ export default function QuoteScreen({navigation}) {
     const [extraInfo, setextraInfo] = useState('')
     const [retDate, setRetDate] = useState(new Date())
     
+
+    const [depCity, setDepCity] = useState('')
+    const [reason, setReason] = useState('')
     const [flightType, setflightType] = useState('')
 
-
-    const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
-    const [items, setItems] = useState([
-        {label: 'One Way', value: 'one way'},
-        {label: 'Return Trip (Day Return)', value: 'return trip day return'},
-        {label: 'Return Trip (Stop Over)', value: 'return trip stop over'}
-
-    ]);
 
     //for datetimepicker:
     const [mode, setMode] = useState('datetime');
@@ -78,12 +73,6 @@ export default function QuoteScreen({navigation}) {
         showMode('datetime');
         };
 
-    // const showTimepicker = () => {
-    // showMode('time');
-
-    // };
-
-
     const db = getFirestore(firebase);
 
 
@@ -95,16 +84,6 @@ export default function QuoteScreen({navigation}) {
         state: { email, fullName, date},
       });
 
-
-    const pickerRef = useRef();
-
-    function pickerOpen() {
-    pickerRef.current.focus();
-    }
-    
-    function pickerClose() {
-    pickerRef.current.blur();
-    }
 
   
 
@@ -131,7 +110,10 @@ export default function QuoteScreen({navigation}) {
             num_passengers:numPassengers,
             extra_info:extraInfo,
             return_date:retDate,
-            return_airport:retAirport,
+            arrival_airport:retAirport,
+            aircraft_type:aircraftType,
+            pet_info:pets,
+            flight_reason:reason,
             })
             console.log("Document written with ID: ", docRef.id);
         navigation.navigate('Home');
@@ -146,7 +128,8 @@ export default function QuoteScreen({navigation}) {
         <View style={styles.container}>
             <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
-                keyboardShouldPersistTaps="always">
+                keyboardShouldPersistTaps="always"
+                nestedScrollEnabled={true}>
                 <TextInput
                     style={styles.input}
                     placeholder='Full Name'
@@ -196,6 +179,47 @@ export default function QuoteScreen({navigation}) {
                         />
                     )}
                 </View>
+                <RNPickerSelect
+                    placeholder={{ label: "Type of Aircraft", value: "Choose Item" }}
+                    style={
+                    {inputIOS:{height: 48,
+                        borderRadius: 5,
+                        overflow: 'hidden',
+                        backgroundColor: 'white',
+                        marginTop: 10,
+                        marginBottom: 10,
+                        marginLeft: 30,
+                        marginRight: 30,
+                        paddingLeft: 16}}}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setAirCraftType(itemValue)}
+                    items={[
+                        { label:"Light Jet (Max 6 Passengers)", value:"Light Jet" },
+                        { label:"Medium Jet (Max 8 Passengers)", value:"Medium Jet" },
+                        { label: "Heavy Jet (Max 8 Pass", value: 'Heavy Jet' },
+                    ]}
+                />
+                <RNPickerSelect
+                    placeholder={{ label: "Purpose of Trip", value: "Choose Item" }}
+                    style={
+                    {inputIOS:{height: 48,
+                        borderRadius: 5,
+                        overflow: 'hidden',
+                        backgroundColor: 'white',
+                        marginTop: 10,
+                        marginBottom: 10,
+                        marginLeft: 30,
+                        marginRight: 30,
+                        paddingLeft: 16}}}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setReason(itemValue)}
+                    items={[
+                        { label:"Pleasure", value:"Pleasure" },
+                        { label:"Business", value:"Business" },
+                        { label: "Bereavement", value: "Bereavement" },
+                        { label: "Medical", value: "Medical" }
+                    ]}
+                />
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
@@ -208,18 +232,9 @@ export default function QuoteScreen({navigation}) {
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
-                    placeholder='Passenger Weight'
+                    placeholder='Total Passenger Weight'
                     onChangeText={(text) => setpassWeight(text)}
                     value={passWeight}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    placeholder='Bag Weight'
-                    onChangeText={(text) => setbagWeight(text)}
-                    value={bagWeight}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
@@ -233,9 +248,28 @@ export default function QuoteScreen({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <SafeAreaView>
+                <ListItem>
+                <GooglePlacesAutocomplete
+                value={depCity}
+                placeholder='Departure City'
+                fetchDetails={true}
+                onPress={(data, details = null) => {
+                    // 'details' is provided when fetchDetails = true
+                    setDepCity(JSON.stringify(details.geometry.location));
+                }}
+                query={{
+                    key: 'AIzaSyAcyD9XhD8P2Ic0uJRobUZewWkg5Ioma2Q',
+                    language: 'en',
+                }}
+                onFail={error => console.error(error)}
 
+                />
+                </ListItem>
+                </SafeAreaView>
 
                 <RNPickerSelect
+                    placeholder={{ label: "Type of Flight", value: "Choose Item" }}
                     style={
                     {inputIOS:{height: 48,
                         borderRadius: 5,
@@ -257,7 +291,7 @@ export default function QuoteScreen({navigation}) {
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
-                    placeholder='Return Airport'
+                    placeholder='Arrival Airport'
                     onChangeText={(text) => setretAirPort(text)}
                     value={retAirport}
                     underlineColorAndroid="transparent"
@@ -277,6 +311,26 @@ export default function QuoteScreen({navigation}) {
                         />
                     )}
                 </View>
+                <TextInput
+                    style={[styles.input, {height:100}]}
+                    multiline={true}
+                    placeholder='Number of Pets–Include Type and Weight'
+                    placeholderTextColor="#aaaaaa"
+                    onChangeText={(text) => setPets(text)}
+                    value={pets}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+                <TextInput
+                    style={[styles.input, {height:100}]}
+                    multiline={true}
+                    placeholderTextColor="#aaaaaa"
+                    placeholder='Bag Types and Weight'
+                    onChangeText={(text) => setbagWeight(text)}
+                    value={bagWeight}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"

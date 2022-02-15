@@ -10,7 +10,7 @@ import ValidationComponent from 'react-native-form-validator';
 import { useValidation } from 'react-native-form-validator';
 //import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import DropDownPicker from 'react-native-dropdown-picker';
+//import DropDownPicker from 'react-native-dropdown-picker';
 import { getFirestore } from "firebase/firestore"
 import RadioButtonRN from 'radio-buttons-react-native';
 import CheckBox from '@react-native-community/checkbox';
