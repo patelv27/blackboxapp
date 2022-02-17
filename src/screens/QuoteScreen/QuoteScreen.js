@@ -14,6 +14,8 @@ import RNPickerSelect from 'react-native-picker-select';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ListItem } from 'native-base';
+import { getDistance } from 'geolib';
+
 
 
 
@@ -41,7 +43,11 @@ export default function QuoteScreen({navigation}) {
     useEffect(() => {
         console.log(depCity)
       }, [depCity])
-    const [arrCity, setArrCity] = useState({lat:"", lng:""})
+
+    const [retCity, setRetCity] = useState({lat:"", lng:""})
+    useEffect(() => {
+        console.log(retCity)
+      }, [retCity])
     const [reason, setReason] = useState('')
     const [flightType, setflightType] = useState('')
 
@@ -85,18 +91,26 @@ export default function QuoteScreen({navigation}) {
 
 
     const { validate, isFieldInError, getErrorsInField, getErrorMessages} = useValidation({
-        state: { email, fullName, date},
+        state: { email, fullName, date, phone, numPassengers, flightType, aircraftType, depCity, retCity},
       });
 
 
-  
+    console.log("????",getDistance(depCity,retCity));
 
     const onRegisterPress = () => {
 
         if (validate({
             fullName: { minlength: 3, maxlength: 7, required: true },
-            email: { email: true, required: true}
-            //date: { date: 'MM-DD-YYYY',required: true }}    
+            email: { email: true, required: true},
+            date: {required:true},
+            retDate: {required:true},
+            phone: {required:true},
+            numPassengers: {required:true},
+            flightType: {required:true},
+            aircraftType: {required:true},
+            depCity: {required:true},
+            retCity: {required:true},
+
         }))
         {
 
@@ -106,7 +120,7 @@ export default function QuoteScreen({navigation}) {
             email_address: email,
             departure_date:date,
             phone_num:phone,
-            departure_airport:depAirport,
+            departure_city:depCity,
             departure_date: date,
             flight_type:flightType,
             passenger_weight:passWeight,
@@ -114,7 +128,7 @@ export default function QuoteScreen({navigation}) {
             num_passengers:numPassengers,
             extra_info:extraInfo,
             return_date:retDate,
-            arrival_airport:retAirport,
+            arrival_city:retCity,
             aircraft_type:aircraftType,
             pet_info:pets,
             flight_reason:reason,
@@ -170,19 +184,15 @@ export default function QuoteScreen({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
-                <View> 
-                    {(
-                        <DateTimePicker
-                        style={styles.input}
-                        testID="dateTimePicker"
-                        value={date}
-                        mode={mode}
-                        is24Hour={true}
-                        display="default"
-                        onChange={() => onChangeDepDate}
-                        />
-                    )}
-                </View>
+                <DateTimePicker
+                style={styles.input}
+                testID="dateTimePicker"
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={() => onChangeDepDate}
+                />
                 <RNPickerSelect
                     placeholder={{ label: "Type of Aircraft", value: "Choose Item" }}
                     style={
@@ -242,16 +252,6 @@ export default function QuoteScreen({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
-                <TextInput
-                    id='airport'
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    placeholder='Departure Airport'
-                    onChangeText={(text) => setdepAirPort(text)}
-                    value={depAirport}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
                 <SafeAreaView>
                 <ListItem>
                 <GooglePlacesAutocomplete
@@ -261,6 +261,22 @@ export default function QuoteScreen({navigation}) {
                 onPress={(data, details = null) => {
                     // 'details' is provided when fetchDetails = true
                     setDepCity((details?.geometry?.location));
+                }}
+                query={{
+                    key: 'AIzaSyAcyD9XhD8P2Ic0uJRobUZewWkg5Ioma2Q',
+                    language: 'en',
+                }}
+                onFail={error => console.error(error)}
+
+                />
+
+                <GooglePlacesAutocomplete
+                value={retCity}
+                placeholder='Arrival City'
+                fetchDetails={true}
+                onPress={(data, details = null) => {
+                    // 'details' is provided when fetchDetails = true
+                    setRetCity((details?.geometry?.location));
                 }}
                 query={{
                     key: 'AIzaSyAcyD9XhD8P2Ic0uJRobUZewWkg5Ioma2Q',
@@ -292,29 +308,16 @@ export default function QuoteScreen({navigation}) {
                         { label: "Round Trip (Stop Over)", value: 'Round Trip Stop Over' },
                     ]}
                 />
-                <TextInput
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    placeholder='Arrival Airport'
-                    onChangeText={(text) => setretAirPort(text)}
-                    value={retAirport}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
+                <DateTimePicker
+                style={styles.input}
+                display="spinner"
+                testID="returndateTimePicker"
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={() => onChangeRetDate}
                 />
-                 <View> 
-                    {(
-                        <DateTimePicker
-                        style={styles.input}
-                        display="spinner"
-                        testID="returndateTimePicker"
-                        value={date}
-                        mode={mode}
-                        is24Hour={true}
-                        display="default"
-                        onChange={() => onChangeRetDate}
-                        />
-                    )}
-                </View>
                 <TextInput
                     style={[styles.input, {height:100}]}
                     multiline={true}
