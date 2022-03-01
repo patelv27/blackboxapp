@@ -15,13 +15,14 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ListItem } from 'native-base';
 import { getDistance } from 'geolib';
-import {GOOGLE_API_KEY} from "@env"
+import {GOOGLE_API_KEY} from "@env";
+import {useTailwind} from 'tailwind-rn';
 
-//todo: add dotenv package to contain api keys
+
 
 
 import { getFirestore } from "firebase/firestore"
-import env from 'react-native-dotenv';
+//import env from 'react-native-dotenv';
 
 export default function QuoteScreen({navigation}) {
     const [fullName, setFullName] = useState('')
@@ -53,7 +54,7 @@ export default function QuoteScreen({navigation}) {
     const [reason, setReason] = useState('')
     const [flightType, setflightType] = useState('')
 
-
+    const tailwind = useTailwind();
     //for datetimepicker:
     const [mode, setMode] = useState('datetime');
     const [show, setShow] = useState(false);
@@ -198,7 +199,7 @@ export default function QuoteScreen({navigation}) {
                     getErrorsInField('phpne').map(errorMessage => (
                     <Text>{errorMessage}</Text>
                     ))}
-                <Text style={styles.textField}>Pick Departure Date and Time:</Text>
+                <Text style={tailwind('text-yellow-200 text-lg left-8')}>Pick Departure Date and Time:</Text>
                 <DateTimePicker
                 style={styles.datetime}
                 testID="dateTimePicker"
@@ -306,7 +307,7 @@ export default function QuoteScreen({navigation}) {
                     setDepCity((details?.geometry?.location));
                 }}
                 query={{
-                    key: {GOOGLE_API_KEY},
+                    key: `${GOOGLE_API_KEY}`,
                     language: 'en',
                 }}
                 onFail={error => console.error(error)}
@@ -337,7 +338,7 @@ export default function QuoteScreen({navigation}) {
                         setRetCity((details?.geometry?.location));
                     }}
                     query={{
-                        key: {GOOGLE_API_KEY},
+                        key: `${GOOGLE_API_KEY}`,
                         language: 'en',
                     }}
                     onFail={error => console.error(error)}
