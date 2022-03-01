@@ -33,6 +33,8 @@ export default function TravelPlanning({navigation}) {
     const [addlTravellers,setAddlTravellers] = useState('')
     const [hotel,setHotel] = useState('')
     const [resort,setResort] = useState('')
+    const [depDate,setDepDate] = useState(new Date())
+    const [retDate,setRetDate] = useState(new Date())
 
     const [flights, setFlights] = useState(false);
     const [needHotel, setNeedHotel] = useState(false);
@@ -65,6 +67,22 @@ export default function TravelPlanning({navigation}) {
         setTimeout()
       };
 
+      const [mode, setMode] = useState('date');
+  
+      const onChangeDepDate = (event, selectedDate) => {
+          const currentDate = selectedDate || date;
+          setShow(Platform.OS === 'ios');
+          setDate(currentDate);
+          setTimeout()
+        };
+  
+      const onChangeRetDate = (event, selectedDate) => {
+      const currentDate = selectedDate || retDate;
+      setShow(Platform.OS === 'ios');
+      setRetDate(currentDate);
+      setTimeout()
+      };
+
 
 
     const { validate, isFieldInError, getErrorsInField, getErrorMessages} = useValidation({
@@ -80,18 +98,32 @@ export default function TravelPlanning({navigation}) {
         {
 
         
-        const docRef = addDoc(collection(db, "localPlugContact"), {
-            first_name: name,
+        const docRef = addDoc(collection(db, "travelPlanning"), {
+            full_name: name,
             time_created: new Date(),
-            email_address: email,
-            discord_address:discord,
-            city_name:city,
-            phone_number:phone,
-            extra_info:addlInfo,
-            some_restaurants:restaurants,
-            some_lodging:lodging,
-            some_connections:connections,
-            some_nightlife:nightlife,
+            city_address: city,
+            birthday: bday,
+            street_address: street,
+            state_address: state,
+            postal_code:postal,
+            budget_amt:budget,
+            hasPassport: passport,
+            departure_city: departureCity,
+            arrival_city: arrivalCity,
+            luggage_info: luggage,
+            pet_info: pets,
+            additional_travellers:addlTravellers,
+            hotel_type: hotel,
+            want_resort: resort,
+            need_flights: flights,
+            need_hotel:needHotel,
+            need_excursions:excursions,
+            need_cruises:cruises,
+            need_rental:rental,
+
+
+            
+            
             })
             console.log("Document written with ID: ", docRef.id);
         navigation.navigate('Home');
@@ -161,8 +193,8 @@ export default function TravelPlanning({navigation}) {
       }, [bday])}>
                     {myText}
                 </Text> */}
+                <Text style={styles.textField}>Guest Birthday:</Text>
                 <DateTimePicker
-                style={styles.input}
                 testID="Guest1BdayPicker"
                 value={bday}
                 mode="date"
@@ -209,6 +241,26 @@ export default function TravelPlanning({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <Text style={styles.textField}>Pick Departure Date:</Text>
+                <DateTimePicker
+                style={styles.dateField}
+                testID="dateTimePicker"
+                value={depDate}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={() => onChangeDepDate}
+                />
+                 <Text style={styles.textField}>Pick Return Date:</Text>
+                <DateTimePicker
+                style={styles.dateField}
+                testID="dateTimePicker"
+                value={retDate}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={() => onChangeRetDate}
+                />
                 <TouchableOpacity
                         onPress={() => setNeedHotel(!needHotel)}
                         style={[styles.button, { backgroundColor: needHotel ? "red" : "transparent" }]}>
@@ -234,15 +286,6 @@ export default function TravelPlanning({navigation}) {
                         style={[styles.button, { backgroundColor: flights ? "red" : "transparent" }]}>
                         <Text>Connecting Flights</Text>
                 </TouchableOpacity>
-                <TextInput
-                style={styles.input}
-                placeholderTextColor="#aaaaaa"
-                placeholder='Additional Guests'
-                onChangeText={(text) => setAddlTravellers(text)}
-                value={addlTravellers}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                />
                 <TextInput
                 style={styles.input}
                 placeholderTextColor="#aaaaaa"
@@ -327,7 +370,7 @@ export default function TravelPlanning({navigation}) {
                 
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => onLocalPlugRegisterPress()}>
+                    onPress={() => onTravelPlanningSubmitPress()}>
                     <Text style={styles.buttonTitle}>Submit</Text>
                 </TouchableOpacity>
             </KeyboardAwareScrollView>

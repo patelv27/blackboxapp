@@ -15,17 +15,19 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ListItem } from 'native-base';
 import { getDistance } from 'geolib';
+import {GOOGLE_API_KEY} from "@env"
 
-
+//todo: add dotenv package to contain api keys
 
 
 import { getFirestore } from "firebase/firestore"
+import env from 'react-native-dotenv';
 
 export default function QuoteScreen({navigation}) {
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
     const [date, setDate] = useState(new Date())
-
+    const [distance,setDistance] = useState(null)
 
     const [pets, setPets] = useState('')
     const [aircraftType, setAirCraftType] = useState('')
@@ -91,11 +93,12 @@ export default function QuoteScreen({navigation}) {
 
 
     const { validate, isFieldInError, getErrorsInField, getErrorMessages} = useValidation({
-        state: { email, fullName, date, phone, numPassengers, flightType, aircraftType, depCity, retCity},
+        state: { email, fullName, date, phone, numPassengers, flightType, aircraftType, depCity, retCity,reason},
       });
 
 
-    console.log("????",getDistance(depCity,retCity));
+    const high = (getDistance(depCity,retCity))/400000*4900;
+    const low = (getDistance(depCity,retCity))/400000*3100;
 
     const onRegisterPress = () => {
 
@@ -110,6 +113,7 @@ export default function QuoteScreen({navigation}) {
             aircraftType: {required:true},
             depCity: {required:true},
             retCity: {required:true},
+            
 
         }))
         {
@@ -133,8 +137,14 @@ export default function QuoteScreen({navigation}) {
             pet_info:pets,
             flight_reason:reason,
             })
+
+        setDistance(getDistance(depCity,retCity))
             console.log("Document written with ID: ", docRef.id);
-        navigation.navigate('Home');
+        navigation.navigate('DisplayQuote',{
+            high_estimate: high,
+            low_estimate: low,
+            city_distance:distance
+          });
         alert("Successfully submitted!");
 
         }
@@ -184,8 +194,13 @@ export default function QuoteScreen({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                {isFieldInError('phone') &&
+                    getErrorsInField('phpne').map(errorMessage => (
+                    <Text>{errorMessage}</Text>
+                    ))}
+                <Text style={styles.textField}>Pick Departure Date and Time:</Text>
                 <DateTimePicker
-                style={styles.input}
+                style={styles.datetime}
                 testID="dateTimePicker"
                 value={date}
                 mode={mode}
@@ -234,19 +249,35 @@ export default function QuoteScreen({navigation}) {
                         { label: "Medical", value: "Medical" }
                     ]}
                 />
-                <TextInput
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    placeholder='Number of Passengers'
-                    onChangeText={(text) => setnumPassengers(text)}
-                    value={numPassengers}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
+                <RNPickerSelect
+                    placeholder={{ label: "Number of Passengers", value: "0" }}
+                    style={
+                    {inputIOS:{height: 48,
+                        borderRadius: 5,
+                        overflow: 'hidden',
+                        backgroundColor: 'white',
+                        marginTop: 10,
+                        marginBottom: 10,
+                        marginLeft: 30,
+                        marginRight: 30,
+                        paddingLeft: 16}}}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setnumPassengers(itemValue)}
+                    items={[
+                        { label:"1", value:"1" },
+                        { label:"2", value:"2" },
+                        { label: "3", value: "3" },
+                        { label: "4", value: "4" },
+                        { label: "5", value: "5" },
+                        { label: "6", value: "6" },
+                        { label: "7", value: "7" },
+                        { label: "8", value: "8" }
+                    ]}
                 />
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
-                    placeholder='Total Passenger Weight'
+                    placeholder='Total Passenger Weight (lbs)'
                     onChangeText={(text) => setpassWeight(text)}
                     value={passWeight}
                     underlineColorAndroid="transparent"
@@ -256,6 +287,18 @@ export default function QuoteScreen({navigation}) {
                 <ListItem>
                 <GooglePlacesAutocomplete
                 value={depCity}
+                styles={{
+                    textInput: {
+                        height: 48,
+                        borderRadius: 5,
+                        overflow: 'hidden',
+                        backgroundColor: 'white',
+                        marginTop: 10,
+                        marginBottom: 10,
+                        marginLeft: 15,
+                        marginRight: 15,
+                        paddingLeft: 16}
+                  }}
                 placeholder='Departure City'
                 fetchDetails={true}
                 onPress={(data, details = null) => {
@@ -263,29 +306,45 @@ export default function QuoteScreen({navigation}) {
                     setDepCity((details?.geometry?.location));
                 }}
                 query={{
-                    key: 'AIzaSyAcyD9XhD8P2Ic0uJRobUZewWkg5Ioma2Q',
+                    key: {GOOGLE_API_KEY},
                     language: 'en',
                 }}
                 onFail={error => console.error(error)}
 
                 />
 
-                <GooglePlacesAutocomplete
-                value={retCity}
-                placeholder='Arrival City'
-                fetchDetails={true}
-                onPress={(data, details = null) => {
-                    // 'details' is provided when fetchDetails = true
-                    setRetCity((details?.geometry?.location));
-                }}
-                query={{
-                    key: 'AIzaSyAcyD9XhD8P2Ic0uJRobUZewWkg5Ioma2Q',
-                    language: 'en',
-                }}
-                onFail={error => console.error(error)}
-
-                />
+                
                 </ListItem>
+                <ListItem>
+                    <GooglePlacesAutocomplete
+                    value={retCity}
+                    styles={{
+                        textInput: {
+                            height: 48,
+                            borderRadius: 5,
+                            overflow: 'hidden',
+                            backgroundColor: 'white',
+                            marginTop: 10,
+                            marginBottom: 10,
+                            marginLeft: 15,
+                            marginRight: 15,
+                            paddingLeft: 16}
+                      }}
+                    placeholder='Arrival City'
+                    fetchDetails={true}
+                    onPress={(data, details = null) => {
+                        // 'details' is provided when fetchDetails = true
+                        setRetCity((details?.geometry?.location));
+                    }}
+                    query={{
+                        key: {GOOGLE_API_KEY},
+                        language: 'en',
+                    }}
+                    onFail={error => console.error(error)}
+
+                    />
+                </ListItem>
+
                 </SafeAreaView>
 
                 <RNPickerSelect
@@ -308,8 +367,9 @@ export default function QuoteScreen({navigation}) {
                         { label: "Round Trip (Stop Over)", value: 'Round Trip Stop Over' },
                     ]}
                 />
+                <Text style={styles.textField}>Pick Arrival Date and Time:</Text>
                 <DateTimePicker
-                style={styles.input}
+                style={styles.datetime}
                 display="spinner"
                 testID="returndateTimePicker"
                 value={date}

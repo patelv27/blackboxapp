@@ -17,7 +17,7 @@ import CheckBox from '@react-native-community/checkbox';
 
 export default function LocalPlugContact({navigation}) {
     const [city, setCity] = useState('')
-    const [tripExtras,setTripExtras] = useState('')
+    //const [tripExtras,setTripExtras] = useState('')
     const [addlInfo,setaddlInfo] = useState('')
     const [phone,setPhone] = useState('')
     const [name, setName] = useState('')
@@ -32,15 +32,16 @@ export default function LocalPlugContact({navigation}) {
     const [connections, setConnections] = useState(false);
 
     const { validate, isFieldInError, getErrorsInField, getErrorMessages} = useValidation({
-        state: { email, name},
+        state: { email, name,discord,city,phone, addlInfo,restaurants,nightlife,connections,lodging},
       });
 
     const onLocalPlugRegisterPress = () => {
 
         if (validate({
             name: { maxlength: 7, required: true },
-            email: { email: true, required: true}
-            //date: { date: 'MM-DD-YYYY',required: true }}    
+            email: { email: true, required: true},
+            discord: {required: true},
+            phone: {required: true}     
         }))
         {
 
