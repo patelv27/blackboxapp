@@ -6,6 +6,10 @@
   left: 2rem
 }
 
+.inline {
+  display: inline
+}
+
 .flex {
   display: flex
 }
