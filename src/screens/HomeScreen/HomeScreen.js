@@ -38,7 +38,9 @@ export default function HomeScreen({navigation}) {
             <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always">
-                
+                <Image source={require('/Users/varunpatel/Desktop/blackboxapp/assets/Black-Box-Collective.png')} 
+                style={styles.image}
+                resizeMode='contain'/>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => navigation.navigate('Quote')}>
@@ -46,12 +48,12 @@ export default function HomeScreen({navigation}) {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => navigation.navigate('LocalPlugContact')}>
+                    onPress={() => navigation.navigate('Local Plug Contact')}>
                     <Text style={styles.buttonTitle}>BECOME A LOCAL PLUG</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => navigation.navigate('TravelPlanning')}>
+                    onPress={() => navigation.navigate('Travel Planning')}>
                     <Text style={styles.buttonTitle}>TRAVEL PLANNING</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -59,8 +61,10 @@ export default function HomeScreen({navigation}) {
                     onPress={() => navigation.navigate('Quote')}>
                     <Text style={styles.buttonTitle}>OUR LINKS</Text>
                 </TouchableOpacity>
-                
             </KeyboardAwareScrollView>
+            <View style={styles.copyrightField}>
+                <Text style={styles.copyrightText}> {'\u00A9'} Black Box Collective 2022</Text>
+            </View>
         </View>
     )
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useRef } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View,Platform, Button } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import styles from './styles';
+import styles from '../styles';
 import { firebase } from '../../firebase/config';
 import 'firebase/compat/firestore';
 import { collection, addDoc, setDoc } from "firebase/firestore"; 
@@ -36,17 +36,25 @@ export default function DisplayQuote({route,navigation}) {
                 keyboardShouldPersistTaps="always"
                 nestedScrollEnabled={true}>
 
+            <Image source={require('/Users/varunpatel/Desktop/blackboxapp/assets/Black-Box-Collective.png')} 
+                style={styles.image}
+                resizeMode='contain'/>
 
 
-            <Text style={styles.center}>Your quote range is between:</Text>
-            <Text style={styles.center}>"High": {route.params.high_estimate}</Text>
-            <Text style={styles.center}>"Low":{route.params.low_estimate}</Text>
-            <Text style={styles.center}>"Approximate Distance" (km):{route.params.city_distance/1000}</Text>
+
+            <Text style={styles.quoteText}>Your estimated flight quote is:</Text>
+            <Text style={styles.quoteValue}>$ {Math.floor(route.params.high_estimate / 10) * 10}</Text>
+
+            <Text style={styles.quoteText}>From: {route.params.depart_city}</Text>
+            <Text style={styles.quoteText}>To: {route.params.arr_city}</Text>
+            <Text style={styles.quoteText}>In a: {route.params.plane_type}</Text>
+            <Text style={styles.quoteText}>On: {route.params.departure_Date}</Text>
+            <Text style={styles.quoteText}>Returning On: {route.params.return_Date}</Text>
 
             <TouchableOpacity
                     style={styles.button}
                     onPress={() => onHomePress()}>
-                    <Text style={styles.buttonTitle}>Submit</Text>
+                    <Text style={styles.buttonTitle}>Home</Text>
                 </TouchableOpacity>
             </KeyboardAwareScrollView>
 

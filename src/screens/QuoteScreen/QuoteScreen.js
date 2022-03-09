@@ -32,27 +32,22 @@ export default function QuoteScreen({navigation}) {
 
     const [pets, setPets] = useState('')
     const [aircraftType, setAirCraftType] = useState('')
-    const [depAirport, setdepAirPort] = useState('')
+    
     const [phone, setPhone] = useState('')
     const [numPassengers, setnumPassengers] = useState('')
-    const [retAirport, setretAirPort] = useState('')
     const [passWeight, setpassWeight] = useState('')
     const [bagWeight, setbagWeight] = useState('')
     const [extraInfo, setextraInfo] = useState('')
     const [retDate, setRetDate] = useState(new Date())
     const [high,setHigh] = useState("")
     const [low, setLow] = useState("")
-    
+    const [depCityName, setDepCityName] = useState("")
+    const [retCityName, setRetCityName] = useState("")
 
     const [depCity, setDepCity] = useState({lat:"", lng:""})
-    useEffect(() => {
-        console.log(depCity)
-      }, [depCity])
+
 
     const [retCity, setRetCity] = useState({lat:"", lng:""})
-    useEffect(() => {
-        console.log(retCity)
-      }, [retCity])
     const [reason, setReason] = useState('')
     const [flightType, setflightType] = useState('')
 
@@ -105,62 +100,74 @@ export default function QuoteScreen({navigation}) {
 
 
     const { validate, isFieldInError, getErrorsInField, getErrorMessages} = useValidation({
-        state: { email, fullName, date, phone, numPassengers, flightType, aircraftType, depCity, retCity,reason},
+        state: { email, fullName, date, phone, numPassengers, flightType, aircraftType, depCityName, retCityName,reason},
       });
 
     
 
     const onRegisterPress = () => {
 
+
+        try {
         if (validate({
-            fullName: { minlength: 3, maxlength: 7, required: true },
-            email: { email: true, required: true},
-            date: {required:true},
-            retDate: {required:true},
-            phone: {required:true},
-            numPassengers: {required:true},
-            flightType: {required:true},
-            aircraftType: {required:true},
-            depCity: {required:true},
-            retCity: {required:true},
-            
+            fullName: { required: true },
+            email: { email: true, required: true },
+            date: { required: true },
+            retDate: { required: true },
+            phone: { required: true },
+            numPassengers: { required: true },
+            flightType: { required: true },
+            aircraftType: { required: true },
+            depCityName: { required: true },
+            retCityName: { required: true },
 
-        }))
-        {
 
-        
-        const docRef = addDoc(collection(db, "test"), {
-            name: fullName,
-            email_address: email,
-            departure_date:date,
-            phone_num:phone,
-            departure_city:depCity,
-            departure_date: date,
-            flight_type:flightType,
-            passenger_weight:passWeight,
-            bag_weight:bagWeight,
-            num_passengers:numPassengers,
-            extra_info:extraInfo,
-            return_date:retDate,
-            arrival_city:retCity,
-            aircraft_type:aircraftType,
-            pet_info:pets,
-            flight_reason:reason,
+        })) {
+
+
+            const docRef = addDoc(collection(db, "test"), {
+                name: fullName,
+                email_address: email,
+                departure_date: date,
+                phone_num: phone,
+                departure_city: depCityName,
+                departure_date: date.toDateString(),
+                flight_type: flightType,
+                passenger_weight: passWeight,
+                bag_weight: bagWeight,
+                num_passengers: numPassengers,
+                extra_info: extraInfo,
+                return_date: retDate.toDateString(),
+                arrival_city: retCityName,
+                aircraft_type: aircraftType,
+                pet_info: pets,
+                flight_reason: reason,
             })
 
-        setDistance(getDistance(depCity,retCity))
+            setDistance(getDistance(depCity, retCity))
             console.log("Document written with ID: ", docRef.id);
-            console.log('high',high)
-            console.log('low',low)
-        navigation.navigate('DisplayQuote',{
-            high_estimate: high,
-            low_estimate: low,
-            city_distance:distance
-          });
-        alert("Successfully submitted!");
+            console.log('high', high)
+            navigation.navigate('Display Quote', {
+                high_estimate: high,
+                low_estimate: low,
+                city_distance: distance,
+                depart_city: depCityName,
+                arr_city: retCityName,
+                plane_type: aircraftType['type'],
+                departure_Date: date.toDateString(),
+                return_Date: retDate.toDateString(),
+
+
+            });
+            alert("Successfully submitted!");
+
+                }
+            }
+        catch (e) {
+            alert("Error occurred with submitting. Make sure you fill all fields out before submitting!")
+        }
 
         }
-    }
         
     return ( 
 
@@ -170,6 +177,9 @@ export default function QuoteScreen({navigation}) {
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always"
                 nestedScrollEnabled={true}>
+                <Image source={require('/Users/varunpatel/Desktop/blackboxapp/assets/Black-Box-Collective.png')} 
+                style={styles.image}
+                resizeMode='contain'/>
                 <Text style={styles.textField}>Full Name:</Text>
                 <TextInput
                     style={styles.input}
@@ -210,7 +220,7 @@ export default function QuoteScreen({navigation}) {
                 />
                 {isFieldInError('phone') &&
                     getErrorsInField('phpne').map(errorMessage => (
-                    <Text>{errorMessage}</Text>
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
                     ))}
                 <Text style={styles.textField}>Pick Departure Date and Time:</Text>
                 <DateTimePicker
@@ -225,9 +235,13 @@ export default function QuoteScreen({navigation}) {
                 display="default"
                 onChange={() => onChangeDepDate}
                 />
+                {isFieldInError('date') &&
+                    getErrorsInField('date').map(errorMessage => (
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
+                    ))}
                 <Text style={styles.textField}>Pick Type of Aircraft:</Text>
                 <RNPickerSelect
-                    placeholder={{ label: "Type of Aircraft", value: "Choose Item" }}
+                    placeholder={{ label: "Type of Aircraft", value: "" }}
                     style={
                     {inputIOS:{height: 48,
                         borderRadius: 5,
@@ -238,18 +252,22 @@ export default function QuoteScreen({navigation}) {
                         marginLeft: 30,
                         marginRight: 30,
                         paddingLeft: 16,
-                        backgroundColor: '#D1BD7825',}}}
+                        backgroundColor: "#F1F1F1",}}}
                     onValueChange={(itemValue, itemIndex) =>
                         setAirCraftType(itemValue)}
                     items={[
-                        { label:"Light Jet (Max 6 Passengers)", value:{'daily':6000, 'hourly':3100} },
-                        { label:"Medium Jet (Max 8 Passengers)", value:{'daily':8500, 'hourly':3500} },
-                        { label: "Heavy Jet (Max 8 Pass", value: {'daily':11000, 'hourly':4900} },
+                        { label:"Light Jet (Max 6 Passengers)", value:{'daily':6000, 'hourly':3100, 'type':"Light Jet"} },
+                        { label:"Medium Jet (Max 8 Passengers)", value:{'daily':8500, 'hourly':3500, 'type':"Medium Jet"} },
+                        { label: "Heavy Jet (Max 8 Pass", value: {'daily':11000, 'hourly':4900, 'type':"Heavy Jet"} },
                     ]}
                 />
+                {isFieldInError('aircraftType') &&
+                    getErrorsInField('aircraftType').map(errorMessage => (
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
+                    ))}
                 <Text style={styles.textField}>Purpose of Trip:</Text>
                 <RNPickerSelect
-                    placeholder={{ label: "Purpose of Trip", value: "Choose Item" }}
+                    placeholder={{ label: "Purpose of Trip", value: "" }}
                     style={
                     {inputIOS:{height: 48,
                         borderRadius: 5,
@@ -260,7 +278,7 @@ export default function QuoteScreen({navigation}) {
                         marginLeft: 30,
                         marginRight: 30,
                         paddingLeft: 16,
-                        backgroundColor: '#D1BD7825'}}}
+                        backgroundColor: "#F1F1F1",}}}
                     onValueChange={(itemValue, itemIndex) =>
                         setReason(itemValue)}
                     items={[
@@ -272,7 +290,7 @@ export default function QuoteScreen({navigation}) {
                 />
                 <Text style={styles.textField}>Number of Passengers:</Text>
                 <RNPickerSelect
-                    placeholder={{ label: "Number of Passengers", value: "0" }}
+                    placeholder={{ label: "Number of Passengers", value: "" }}
                     style={
                     {inputIOS:{height: 48,
                         borderRadius: 5,
@@ -283,7 +301,7 @@ export default function QuoteScreen({navigation}) {
                         marginLeft: 30,
                         marginRight: 30,
                         paddingLeft: 16,
-                        backgroundColor: '#D1BD7825',}}}
+                        backgroundColor: "#F1F1F1",}}}
                     onValueChange={(itemValue, itemIndex) =>
                         setnumPassengers(itemValue)}
                     items={[
@@ -297,6 +315,10 @@ export default function QuoteScreen({navigation}) {
                         { label: "8", value: "8" }
                     ]}
                 />
+                {isFieldInError('numPassengers') &&
+                    getErrorsInField('numPassengers').map(errorMessage => (
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
+                    ))}
                 <Text style={styles.textField}>Total Passenger Weight:</Text>
                 <TextInput
                     style={styles.input}
@@ -321,13 +343,14 @@ export default function QuoteScreen({navigation}) {
                         marginLeft: 30,
                         marginRight: 30,
                         paddingLeft: 16,
-                        backgroundColor: '#D1BD7825',}
+                        backgroundColor: "#F1F1F1",}
                   }}
                 placeholder='Departure City'
                 fetchDetails={true}
                 onPress={(data, details = null) => {
                     // 'details' is provided when fetchDetails = true
                     setDepCity((details?.geometry?.location));
+                    setDepCityName(details.name)
                 }}
                 query={{
                     key: `${GOOGLE_API_KEY}`,
@@ -335,6 +358,10 @@ export default function QuoteScreen({navigation}) {
                 }}
                 onFail={error => console.error(error)}
                 />
+                {isFieldInError('depCityName') &&
+                    getErrorsInField('depCityName').map(errorMessage => (
+                    <Text style={styles.errorMessage}>This field is required</Text>
+                    ))}
                 <Text style={styles.textField}>Arrival City:</Text>
                     <GooglePlacesAutocomplete
                     value={retCity}
@@ -349,13 +376,14 @@ export default function QuoteScreen({navigation}) {
                             marginLeft: 30,
                             marginRight: 30,
                             paddingLeft: 16,
-                            backgroundColor: '#D1BD7825',}
+                            backgroundColor: "#F1F1F1",}
                       }}
                     placeholder='Arrival City'
                     fetchDetails={true}
                     onPress={(data, details = null) => {
                         // 'details' is provided when fetchDetails = true
                         setRetCity((details?.geometry?.location));
+                        setRetCityName(details.name)
                     }}
                     query={{
                         key: `${GOOGLE_API_KEY}`,
@@ -364,9 +392,13 @@ export default function QuoteScreen({navigation}) {
                     onFail={error => console.error(error)}
 
                     />
+                {isFieldInError('retCityName') &&
+                    getErrorsInField('retCityName').map(errorMessage => (
+                    <Text style={styles.errorMessage}>This field is required</Text>
+                    ))}
                 <Text style={styles.textField}>Type of Flight:</Text>
                 <RNPickerSelect
-                    placeholder={{ label: "Type of Flight", value: "Choose Item" }}
+                    placeholder={{ label: "Type of Flight", value: "" }}
                     style={
                     {inputIOS:{height: 48,
                         borderRadius: 5,
@@ -377,26 +409,35 @@ export default function QuoteScreen({navigation}) {
                         marginLeft: 30,
                         marginRight: 30,
                         paddingLeft: 16,
-                        backgroundColor: '#D1BD7825',}}}
+                        backgroundColor: "#F1F1F1",}}}
                     onValueChange={(itemValue, itemIndex) =>
                         setflightType(itemValue)}
                     items={[
-                        { label:"One Way", value:1 },
-                        { label:"Round Trip (Day Return)", value:2 },
-                        { label: "Round Trip (Stop Over)", value: 2 },
+                        { label:"One Way", value: 1 },
+                        { label:"Round Trip", value: 2 },
+                        //{ label: "Round Trip (Stop Over)", value: 3 },
                     ]}
                 />
+                {isFieldInError('flightType') &&
+                    getErrorsInField('flightType').map(errorMessage => (
+                    <Text style={styles.errorMessage}> {errorMessage}</Text>
+                    ))}
                 <Text style={styles.textField}>Pick Arrival Date and Time:</Text>
                 <DateTimePicker
                 style={styles.datetime}
                 display="spinner"
+                textColor="yellow"
                 testID="returndateTimePicker"
-                value={date}
+                value={retDate}
                 mode={mode}
                 is24Hour={true}
                 display="default"
                 onChange={() => onChangeRetDate}
                 />
+                {isFieldInError('retDate') &&
+                    getErrorsInField('retDate').map(errorMessage => (
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
+                    ))}
                 <Text style={styles.textField}>Pets (if applicable):</Text>
                 <TextInput
                     style={[styles.input, {height:100}]}

@@ -5,6 +5,7 @@ export default StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         marginBottom:50,
+        justifyContent:'center'
     },
     title: {
 
@@ -50,13 +51,13 @@ export default StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         marginBottom:50,
-        backgroundColor:'white'
+        backgroundColor:'black'
     },
     input: {
         height: 48,
         borderRadius: 5,
         overflow: 'hidden',
-        backgroundColor: '#D1BD7825',
+        backgroundColor: '#F1F1F1',
         marginTop: 10,
         marginBottom: 10,
         marginLeft: 30,
@@ -91,8 +92,19 @@ export default StyleSheet.create({
         paddingLeft:30,
         marginBottom:3,
         fontWeight:'600',
+        color:"#D1BD78",
         //fontFamily:'poppins',
         fontSize:16
+        
+    },
+    textFieldAlt: {
+        //flex: 1,
+        //alignItems: 'flex-start',
+        //paddingLeft:30,
+        fontWeight:'600',
+        color:"#FFFFFF",
+        //fontFamily:'poppins',
+        //fontSize:16
         
     },
     datetime:{
@@ -103,7 +115,7 @@ export default StyleSheet.create({
         marginLeft: 30,
         marginRight: 30,
         paddingLeft: 16,
-        backgroundColor: '#D1BD7825',
+        backgroundColor: "#F1F1F1",
     },
     errorMessage:{
         height: 30,
@@ -112,5 +124,37 @@ export default StyleSheet.create({
         marginLeft: 30,
         marginRight: 30,
         paddingLeft: 16,
+        color:'#FFFFFF'
+    },
+    selectContainer: {
+        margin:10
+    },
+    image: {
+        width: 200,
+        height:200,
+        alignSelf:'center'
+    },
+    copyrightField: {
+        marginTop:'auto'
+        
+    },
+    copyrightText:{
+        fontWeight:'600',
+        color:"#D1BD78",
+    },
+    quoteValue: {
+        color:"#FFFFFF",
+        fontSize:28,
+        alignSelf:'center'
+
+    },
+    quoteText: {
+        flex: 1,
+        alignSelf: 'center',
+        marginBottom:3,
+        fontWeight:'600',
+        color:"#D1BD78",
+        //fontFamily:'poppins',
+        fontSize:16
     }
 })

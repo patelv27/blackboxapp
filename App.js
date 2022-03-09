@@ -24,14 +24,14 @@ export default function App() {
   const [user, setUser] = useState(true)
   return (
     <TailwindProvider utilities={utilities}>
-      <NavigationContainer theme={DefaultTheme}>
+      <NavigationContainer theme={DarkTheme}>
         <Stack.Navigator>
           { user ? (
             <><Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Quote" component={QuoteScreen} />
-            <Stack.Screen name="DisplayQuote" component={DisplayQuote} />
-            <Stack.Screen name="LocalPlugContact" component={LocalPlugContact} />
-            <Stack.Screen name="TravelPlanning" component={TravelPlanning} /></>
+            <Stack.Screen name="Display Quote" component={DisplayQuote} />
+            <Stack.Screen name="Local Plug Contact" component={LocalPlugContact} />
+            <Stack.Screen name="Travel Planning" component={TravelPlanning} /></>
             
           ) : (
             <>

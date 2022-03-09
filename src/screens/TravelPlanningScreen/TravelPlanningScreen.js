@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useRef } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View,Platform, Button,Pressables, Pressable } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import styles from './styles';
+import styles from '../styles';
 import { firebase } from '../../firebase/config';
 import 'firebase/compat/firestore';
 import { collection, addDoc, setDoc } from "firebase/firestore"; 
@@ -139,18 +139,22 @@ export default function TravelPlanning({navigation}) {
             <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always">
+                 <Image source={require('/Users/varunpatel/Desktop/blackboxapp/assets/Black-Box-Collective.png')} 
+                style={styles.image}
+                resizeMode='contain'/>
                
-    
-                
+
+               <Text style={styles.textField}>Full Name:</Text>
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
-                    placeholder='Guest 1 Full Name'
+                    placeholder='Full Name'
                     onChangeText={(text) => setName(text)}
                     value={name}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <Text style={styles.textField}>Street Address:</Text>
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
@@ -160,6 +164,7 @@ export default function TravelPlanning({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <Text style={styles.textField}>City:</Text>
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
@@ -169,6 +174,7 @@ export default function TravelPlanning({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <Text style={styles.textField}>State:</Text>
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
@@ -178,6 +184,7 @@ export default function TravelPlanning({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <Text style={styles.textField}>Zip Code:</Text>
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
@@ -193,8 +200,9 @@ export default function TravelPlanning({navigation}) {
       }, [bday])}>
                     {myText}
                 </Text> */}
-                <Text style={styles.textField}>Guest Birthday:</Text>
+                <Text style={styles.textField}>Date of Birth:</Text>
                 <DateTimePicker
+                style={styles.datetime}
                 testID="Guest1BdayPicker"
                 value={bday}
                 mode="date"
@@ -202,6 +210,7 @@ export default function TravelPlanning({navigation}) {
                 display="default"
                 onChange={() => onChangeGuest1Bday}
                 />
+                <Text style={styles.textField}>Passport Status:</Text>
                 <RNPickerSelect
                     value={passport}
                     placeholder={{ label: "Has Passport?", value: "Choose Item" }}
@@ -223,6 +232,7 @@ export default function TravelPlanning({navigation}) {
                         { label: "In the process", value: "In the process" },
                     ]}
                 />
+                <Text style={styles.textField}>Departure City:</Text>
                  <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
@@ -232,6 +242,7 @@ export default function TravelPlanning({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <Text style={styles.textField}>Arrival City:</Text>
                  <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
@@ -243,7 +254,7 @@ export default function TravelPlanning({navigation}) {
                 />
                 <Text style={styles.textField}>Pick Departure Date:</Text>
                 <DateTimePicker
-                style={styles.dateField}
+                style={styles.datetime}
                 testID="dateTimePicker"
                 value={depDate}
                 mode={mode}
@@ -253,7 +264,7 @@ export default function TravelPlanning({navigation}) {
                 />
                  <Text style={styles.textField}>Pick Return Date:</Text>
                 <DateTimePicker
-                style={styles.dateField}
+                style={styles.datetime}
                 testID="dateTimePicker"
                 value={retDate}
                 mode={mode}
@@ -261,31 +272,35 @@ export default function TravelPlanning({navigation}) {
                 display="default"
                 onChange={() => onChangeRetDate}
                 />
-                <TouchableOpacity
-                        onPress={() => setNeedHotel(!needHotel)}
-                        style={[styles.button, { backgroundColor: needHotel ? "red" : "transparent" }]}>
-                        <Text>Hotel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                        onPress={() => setCruises(!cruises)}
-                        style={[styles.button, { backgroundColor: cruises ? "red" : "transparent" }]}>
-                        <Text>Cruises</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                        onPress={() => setRental(!rental)}
-                        style={[styles.button, { backgroundColor: rental ? "red" : "transparent" }]}>
-                        <Text>Rental Car</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                        onPress={() => setExcursions(!excursions)}
-                        style={[styles.button, { backgroundColor: excursions ? "red" : "transparent" }]}>
-                        <Text>Excursions</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                        onPress={() => setFlights(!flights)}
-                        style={[styles.button, { backgroundColor: flights ? "red" : "transparent" }]}>
-                        <Text>Connecting Flights</Text>
-                </TouchableOpacity>
+                <View style={styles.selectContainer}>
+                    <Text style={styles.textField}>Select Desired Amenities:</Text>
+                    <TouchableOpacity
+                            onPress={() => setNeedHotel(!needHotel)}
+                            style={[styles.button, { backgroundColor: needHotel ? "#D1BD78" : "transparent" }]}>
+                            <Text style={styles.textFieldAlt}>Hotel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                            onPress={() => setCruises(!cruises)}
+                            style={[styles.button, { backgroundColor: cruises ? "#D1BD78" : "transparent" }]}>
+                            <Text style={styles.textFieldAlt}>Cruises</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                            onPress={() => setRental(!rental)}
+                            style={[styles.button, { backgroundColor: rental ? "#D1BD78" : "transparent" }]}>
+                            <Text style={styles.textFieldAlt}>Rental Car</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                            onPress={() => setExcursions(!excursions)}
+                            style={[styles.button, { backgroundColor: excursions ? "#D1BD78" : "transparent" }]}>
+                            <Text style={styles.textFieldAlt}>Excursions</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                            onPress={() => setFlights(!flights)}
+                            style={[styles.button, { backgroundColor: flights ? "#D1BD78" : "transparent" }]}>
+                            <Text style={styles.textFieldAlt}>Connecting Flights</Text>
+                    </TouchableOpacity>
+                </View>
+                <Text style={styles.textField}>Additional Guests:</Text>
                 <TextInput
                 style={styles.input}
                 placeholderTextColor="#aaaaaa"
@@ -295,6 +310,7 @@ export default function TravelPlanning({navigation}) {
                 underlineColorAndroid="transparent"
                 autoCapitalize="none"
                 />
+                <Text style={styles.textField}>Estimated Budget:</Text>
                 <TextInput
                 style={styles.input}
                 placeholderTextColor="#aaaaaa"
@@ -304,6 +320,7 @@ export default function TravelPlanning({navigation}) {
                 underlineColorAndroid="transparent"
                 autoCapitalize="none"
                 />
+                <Text style={styles.textField}>Pick Hotel Type:</Text>
                 <RNPickerSelect
                     value={hotel}
                     placeholder={{ label: "Choose Hotel Type", value: "Choose Item" }}
@@ -325,8 +342,10 @@ export default function TravelPlanning({navigation}) {
                         { label: "3 Star", value: "3 Star" },
                     ]}
                 />
+                <Text style={styles.textField}>Pet Info (if applicable):</Text>
                 <TextInput
                     style={styles.input}
+                    multiline={true}
                     placeholderTextColor="#aaaaaa"
                     placeholder='Pets–What Type, How Many, and Weight for Each'
                     onChangeText={(text) => setPets(text)}
@@ -334,6 +353,7 @@ export default function TravelPlanning({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <Text style={styles.textField}>Luggage Info (if applicable):</Text>
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
@@ -343,6 +363,7 @@ export default function TravelPlanning({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <Text style={styles.textField}>Prefer All-Inclusive Resort:</Text>
                 <RNPickerSelect
                     value={resort}
                     placeholder={{ label: "All inclusive resort", value: "Choose Item" }}
@@ -364,7 +385,6 @@ export default function TravelPlanning({navigation}) {
                         { label: "No Preference", value: "no preference" },
                     ]}
                 />
-                <AddGuest></AddGuest>
                 
 
                 
