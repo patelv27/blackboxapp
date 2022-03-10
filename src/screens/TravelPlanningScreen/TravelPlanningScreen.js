@@ -16,6 +16,7 @@ import RadioButtonRN from 'radio-buttons-react-native';
 import CheckBox from '@react-native-community/checkbox';
 import AddGuest from './addGuest';
 import RNPickerSelect from 'react-native-picker-select';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 export default function TravelPlanning({navigation}) {
     const [city, setCity] = useState('')
@@ -51,37 +52,57 @@ export default function TravelPlanning({navigation}) {
 
 
     
-    // useEffect(() => {
-    //     // Update the document title using the browser API
-    //     myText=setMyText(bday.toDateString());
-    //   }, [bday]);
-    
+   
+
+    const [isDepDatePickerVisible, setDepDatePickerVisibility] = useState(false);
+    const [isRetDatePickerVisible, setRetDatePickerVisibility] = useState(false);
+    const [isBdayPickerVisible, setBdayPickerVisibility] = useState(false);
+
+    const showDepDatePicker = () => {
+        setDepDatePickerVisibility(true);
+    };
+
+    const hideDepDatePicker = () => {
+        setDepDatePickerVisibility(false);
+    };
+
+    const handleDepConfirm = (depDate) => {
+        console.warn("A depDate has been picked: ", depDate);
+        setDepDate(depDate);
+        
+        hideDepDatePicker();
+    };
+
+    const showRetDatePicker = () => {
+        setRetDatePickerVisibility(true);
+    };
+
+    const hideRetDatePicker = () => {
+        setRetDatePickerVisibility(false);
+    };
+
+    const handleRetConfirm = (retDate) => {
+        console.warn("A retDate has been picked: ", retDate);
+        setRetDate(retDate);
+        
+        hideRetDatePicker();
+    };
 
 
-    
+    const showBdayDatePicker = () => {
+        setBdayPickerVisibility(true);
+    };
 
-    const onChangeGuest1Bday = (event, selectedDate) => {
-        const currentDate = selectedDate || date;
-        setShow(Platform.OS === 'ios');
-        setBday(currentDate);
-        setTimeout()
-      };
+    const hideBdayPicker = () => {
+        setBdayPickerVisibility(false);
+    };
 
-      const [mode, setMode] = useState('date');
-  
-      const onChangeDepDate = (event, selectedDate) => {
-          const currentDate = selectedDate || date;
-          setShow(Platform.OS === 'ios');
-          setDate(currentDate);
-          setTimeout()
-        };
-  
-      const onChangeRetDate = (event, selectedDate) => {
-      const currentDate = selectedDate || retDate;
-      setShow(Platform.OS === 'ios');
-      setRetDate(currentDate);
-      setTimeout()
-      };
+    const handleBdayConfirm = (bdayDate) => {
+        console.warn("A retDate has been picked: ", bdayDate);
+        setBday(bdayDate);
+        
+        hideBdayPicker();
+    };
 
 
 
@@ -93,7 +114,7 @@ export default function TravelPlanning({navigation}) {
 
         if (validate({
             name: { maxlength: 7, required: true },
-            //date: { date: 'MM-DD-YYYY',required: true }}    
+            //depDate: { depDate: 'MM-DD-YYYY',required: true }}    
         }))
         {
 
@@ -201,19 +222,23 @@ export default function TravelPlanning({navigation}) {
                     {myText}
                 </Text> */}
                 <Text style={styles.textField}>Date of Birth:</Text>
-                <DateTimePicker
-                style={styles.datetime}
-                testID="Guest1BdayPicker"
-                value={bday}
-                mode="date"
-                is24Hour={true}
-                display="default"
-                onChange={() => onChangeGuest1Bday}
+                <TouchableOpacity
+                title="Show Birth Date Picker" 
+                onPress={showBdayDatePicker}
+                style={styles.input}
+                 >
+                    <Text style={styles.inputText}>{bday.toDateString()}</Text></TouchableOpacity>
+                <DateTimePickerModal
+                    isVisible={isBdayPickerVisible}
+                    mode="date"
+                    onConfirm={handleBdayConfirm}
+                    onCancel={hideBdayPicker}
+                    maximumDate={new Date()}
                 />
                 <Text style={styles.textField}>Passport Status:</Text>
                 <RNPickerSelect
                     value={passport}
-                    placeholder={{ label: "Has Passport?", value: "Choose Item" }}
+                    placeholder={{ label: "Has Passport?", value: "" }}
                     style={
                     {inputIOS:{height: 48,
                         borderRadius: 5,
@@ -253,25 +278,41 @@ export default function TravelPlanning({navigation}) {
                     autoCapitalize="none"
                 />
                 <Text style={styles.textField}>Pick Departure Date:</Text>
-                <DateTimePicker
-                style={styles.datetime}
-                testID="dateTimePicker"
-                value={depDate}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={() => onChangeDepDate}
+                <TouchableOpacity
+                title="Show Departure Date Picker" 
+                onPress={showDepDatePicker}
+                style={styles.input}
+                 >
+                    <Text style={styles.inputText}>{depDate.toString()}</Text></TouchableOpacity>
+                <DateTimePickerModal
+                    isVisible={isDepDatePickerVisible}
+                    mode="datetime"
+                    onConfirm={handleDepConfirm}
+                    onCancel={hideDepDatePicker}
+                    minimumDate={new Date()}
                 />
+                {isFieldInError('depDate') &&
+                    getErrorsInField('depDate').map(errorMessage => (
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
+                    ))}
                  <Text style={styles.textField}>Pick Return Date:</Text>
-                <DateTimePicker
-                style={styles.datetime}
-                testID="dateTimePicker"
-                value={retDate}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={() => onChangeRetDate}
+                 <TouchableOpacity
+                title="Show Departure Date Picker" 
+                onPress={showRetDatePicker}
+                style={styles.input}
+                 >
+                    <Text style={styles.inputText}>{retDate.toString()}</Text></TouchableOpacity>
+                <DateTimePickerModal
+                    isVisible={isRetDatePickerVisible}
+                    mode="datetime"
+                    onConfirm={handleRetConfirm}
+                    onCancel={hideRetDatePicker}
+                    minimumDate={new Date()}
                 />
+                {isFieldInError('retDate') &&
+                    getErrorsInField('retDate').map(errorMessage => (
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
+                    ))}
                 <View style={styles.selectContainer}>
                     <Text style={styles.textField}>Select Desired Amenities:</Text>
                     <TouchableOpacity
@@ -301,15 +342,36 @@ export default function TravelPlanning({navigation}) {
                     </TouchableOpacity>
                 </View>
                 <Text style={styles.textField}>Additional Guests:</Text>
-                <TextInput
-                style={styles.input}
-                placeholderTextColor="#aaaaaa"
-                placeholder='Additional Guests'
-                onChangeText={(text) => setAddlTravellers(text)}
-                value={addlTravellers}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
+                <RNPickerSelect
+                    placeholder={{ label: "Additional Passengers", value: "" }}
+                    style={
+                    {inputIOS:{height: 48,
+                        borderRadius: 5,
+                        overflow: 'hidden',
+                        backgroundColor: 'white',
+                        marginTop: 10,
+                        marginBottom: 10,
+                        marginLeft: 30,
+                        marginRight: 30,
+                        paddingLeft: 16,
+                        backgroundColor: "#F1F1F1",}}}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setAddlTravellers(itemValue)}
+                    items={[
+                        { label:"None", value:"0" },
+                        { label:"1", value:"1" },
+                        { label:"2", value:"2" },
+                        { label: "3", value: "3" },
+                        { label: "4", value: "4" },
+                        { label: "5", value: "5" },
+                        { label: "6", value: "6" },
+                        { label: "7", value: "7" }
+                    ]}
                 />
+                {isFieldInError('numPassengers') &&
+                    getErrorsInField('numPassengers').map(errorMessage => (
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
+                    ))}
                 <Text style={styles.textField}>Estimated Budget:</Text>
                 <TextInput
                 style={styles.input}
@@ -344,7 +406,7 @@ export default function TravelPlanning({navigation}) {
                 />
                 <Text style={styles.textField}>Pet Info (if applicable):</Text>
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input, {height:100}]}
                     multiline={true}
                     placeholderTextColor="#aaaaaa"
                     placeholder='Pets–What Type, How Many, and Weight for Each'

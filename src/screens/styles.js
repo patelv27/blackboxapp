@@ -7,9 +7,6 @@ export default StyleSheet.create({
         marginBottom:50,
         justifyContent:'center'
     },
-    title: {
-
-    },
     logo: {
         flex: 1,
         height: 120,
@@ -156,5 +153,10 @@ export default StyleSheet.create({
         color:"#D1BD78",
         //fontFamily:'poppins',
         fontSize:16
+    },
+    inputText: {
+        paddingTop:18,
+        paddingLeft:0
+
     }
 })

@@ -79,7 +79,7 @@ export default class AddGuest extends Component {
         style={styles.input}
         testID="Guest2BdayPicker"
         value={new Date()}
-        mode="date"
+        mode="depDate"
         is24Hour={true}
         display="default"
         onChange={(text) => this.setState({secondBday:text})}

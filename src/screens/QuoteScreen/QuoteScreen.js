@@ -17,17 +17,19 @@ import { ListItem } from 'native-base';
 import { getDistance } from 'geolib';
 import {GOOGLE_API_KEY} from "@env";
 import {useTailwind} from 'tailwind-rn';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+
 
 
 
 
 import { getFirestore } from "firebase/firestore"
-//import env from 'react-native-dotenv';
+
 
 export default function QuoteScreen({navigation}) {
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
-    const [date, setDate] = useState(new Date())
+    const [depDate, setDate] = useState(new Date())
     const [distance,setDistance] = useState(null)
 
     const [pets, setPets] = useState('')
@@ -52,37 +54,39 @@ export default function QuoteScreen({navigation}) {
     const [flightType, setflightType] = useState('')
 
     const tailwind = useTailwind();
-    //for datetimepicker:
-    const [mode, setMode] = useState('datetime');
-    const [show, setShow] = useState(false);
+    
+    const [isDepDatePickerVisible, setDepDatePickerVisibility] = useState(false);
+    const [isRetDatePickerVisible, setRetDatePickerVisibility] = useState(false);
 
-    const onChangeDepDate = (event, selectedDate) => {
-        const currentDate = selectedDate || date;
-        setShow(Platform.OS === 'ios');
-        setDate(currentDate);
-        setTimeout()
-      };
-
-    const onChangeRetDate = (event, selectedDate) => {
-    const currentDate = selectedDate || retDate;
-    setShow(Platform.OS === 'ios');
-    setRetDate(currentDate);
-    setTimeout()
+    const showDepDatePicker = () => {
+        setDepDatePickerVisibility(true);
     };
 
-    const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
+    const hideDepDatePicker = () => {
+        setDepDatePickerVisibility(false);
     };
 
-    const showDepDatepicker = () => {
-        showMode('datetime');
-        };
+    const handleDepConfirm = (depDate) => {
+        console.warn("A depDate has been picked: ", depDate);
+        setDate(depDate);
+        
+        hideDepDatePicker();
+    };
 
-    const showRetDatepicker = () => {
-        showMode('datetime');
-        };
+    const showRetDatePicker = () => {
+        setRetDatePickerVisibility(true);
+    };
 
+    const hideRetDatePicker = () => {
+        setRetDatePickerVisibility(false);
+    };
+
+    const handleRetConfirm = (retDate) => {
+        console.warn("A retDate has been picked: ", retDate);
+        setRetDate(retDate);
+        
+        hideRetDatePicker();
+    };
     const db = getFirestore(firebase);
 
 
@@ -93,81 +97,73 @@ export default function QuoteScreen({navigation}) {
             setLow(getDistance(depCity,retCity)/740298*aircraftType['hourly']+aircraftType['daily']);
         }
 
-       
-
-
       },[aircraftType,depCity,retCity,flightType]);
 
 
     const { validate, isFieldInError, getErrorsInField, getErrorMessages} = useValidation({
-        state: { email, fullName, date, phone, numPassengers, flightType, aircraftType, depCityName, retCityName,reason},
+        state: { email, fullName, depDate, phone, numPassengers, flightType, aircraftType, depCityName, retCityName,reason},
       });
 
-    
 
     const onRegisterPress = () => {
-
-
         try {
-        if (validate({
-            fullName: { required: true },
-            email: { email: true, required: true },
-            date: { required: true },
-            retDate: { required: true },
-            phone: { required: true },
-            numPassengers: { required: true },
-            flightType: { required: true },
-            aircraftType: { required: true },
-            depCityName: { required: true },
-            retCityName: { required: true },
+            if (validate({
+                fullName: { required: true },
+                email: { email: true, required: true },
+                depDate: { required: true },
+                retDate: { required: true },
+                phone: { required: true },
+                numPassengers: { required: true },
+                flightType: { required: true },
+                aircraftType: { required: true },
+                depCityName: { required: true },
+                retCityName: { required: true },
 
 
-        })) {
+            })) {
 
 
-            const docRef = addDoc(collection(db, "test"), {
-                name: fullName,
-                email_address: email,
-                departure_date: date,
-                phone_num: phone,
-                departure_city: depCityName,
-                departure_date: date.toDateString(),
-                flight_type: flightType,
-                passenger_weight: passWeight,
-                bag_weight: bagWeight,
-                num_passengers: numPassengers,
-                extra_info: extraInfo,
-                return_date: retDate.toDateString(),
-                arrival_city: retCityName,
-                aircraft_type: aircraftType,
-                pet_info: pets,
-                flight_reason: reason,
-            })
+                const docRef = addDoc(collection(db, "test"), {
+                    name: fullName,
+                    email_address: email,
+                    departure_date: depDate,
+                    phone_num: phone,
+                    departure_city: depCityName,
+                    departure_date: depDate.toDateString(),
+                    flight_type: flightType,
+                    passenger_weight: passWeight,
+                    bag_weight: bagWeight,
+                    num_passengers: numPassengers,
+                    extra_info: extraInfo,
+                    return_date: retDate.toDateString(),
+                    arrival_city: retCityName,
+                    aircraft_type: aircraftType,
+                    pet_info: pets,
+                    flight_reason: reason,
+                })
 
-            setDistance(getDistance(depCity, retCity))
-            console.log("Document written with ID: ", docRef.id);
-            console.log('high', high)
-            navigation.navigate('Display Quote', {
-                high_estimate: high,
-                low_estimate: low,
-                city_distance: distance,
-                depart_city: depCityName,
-                arr_city: retCityName,
-                plane_type: aircraftType['type'],
-                departure_Date: date.toDateString(),
-                return_Date: retDate.toDateString(),
+                setDistance(getDistance(depCity, retCity))
+                console.log("Document written with ID: ", docRef.id);
+                console.log('high', high)
+                navigation.navigate('Display Quote', {
+                    high_estimate: high,
+                    low_estimate: low,
+                    city_distance: distance,
+                    depart_city: depCityName,
+                    arr_city: retCityName,
+                    plane_type: aircraftType['type'],
+                    departure_Date: depDate.toDateString(),
+                    return_Date: retDate.toDateString(),
 
 
-            });
-            alert("Successfully submitted!");
+                });
+                alert("Successfully submitted!");
 
+                    }
                 }
-            }
         catch (e) {
             alert("Error occurred with submitting. Make sure you fill all fields out before submitting!")
-        }
-
-        }
+        }}
         
     return ( 
 
@@ -219,24 +215,25 @@ export default function QuoteScreen({navigation}) {
                     autoCapitalize="none"
                 />
                 {isFieldInError('phone') &&
-                    getErrorsInField('phpne').map(errorMessage => (
+                    getErrorsInField('phone').map(errorMessage => (
                     <Text style={styles.errorMessage}>{errorMessage}</Text>
                     ))}
                 <Text style={styles.textField}>Pick Departure Date and Time:</Text>
-                <DateTimePicker
-                style={styles.datetime}
-                display='spinner'
-                textColor='red'
-                themeVariant="light"
-                testID="dateTimePicker"
-                value={date}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={() => onChangeDepDate}
+                <TouchableOpacity
+                title="Show Departure Date Picker" 
+                onPress={showDepDatePicker}
+                style={styles.input}
+                 >
+                    <Text style={styles.inputText}>{depDate.toString()}</Text></TouchableOpacity>
+                <DateTimePickerModal
+                    isVisible={isDepDatePickerVisible}
+                    mode="datetime"
+                    onConfirm={handleDepConfirm}
+                    onCancel={hideDepDatePicker}
+                    minimumDate={new Date()}
                 />
-                {isFieldInError('date') &&
-                    getErrorsInField('date').map(errorMessage => (
+                {isFieldInError('depDate') &&
+                    getErrorsInField('depDate').map(errorMessage => (
                     <Text style={styles.errorMessage}>{errorMessage}</Text>
                     ))}
                 <Text style={styles.textField}>Pick Type of Aircraft:</Text>
@@ -378,7 +375,7 @@ export default function QuoteScreen({navigation}) {
                             paddingLeft: 16,
                             backgroundColor: "#F1F1F1",}
                       }}
-                    placeholder='Arrival City'
+                    placeholder="Arrival City"
                     fetchDetails={true}
                     onPress={(data, details = null) => {
                         // 'details' is provided when fetchDetails = true
@@ -422,17 +419,19 @@ export default function QuoteScreen({navigation}) {
                     getErrorsInField('flightType').map(errorMessage => (
                     <Text style={styles.errorMessage}> {errorMessage}</Text>
                     ))}
-                <Text style={styles.textField}>Pick Arrival Date and Time:</Text>
-                <DateTimePicker
-                style={styles.datetime}
-                display="spinner"
-                textColor="yellow"
-                testID="returndateTimePicker"
-                value={retDate}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={() => onChangeRetDate}
+                <Text style={styles.textField}>Pick Return Date and Time:</Text>
+                <TouchableOpacity
+                title="Show Departure Date Picker" 
+                onPress={showRetDatePicker}
+                style={styles.input}
+                 >
+                    <Text style={styles.inputText}>{retDate.toString()}</Text></TouchableOpacity>
+                <DateTimePickerModal
+                    isVisible={isRetDatePickerVisible}
+                    mode="datetime"
+                    onConfirm={handleRetConfirm}
+                    onCancel={hideRetDatePicker}
+                    minimumDate={new Date()}
                 />
                 {isFieldInError('retDate') &&
                     getErrorsInField('retDate').map(errorMessage => (
