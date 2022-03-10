@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useRef } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View,Platform, Button,Pressables, Pressable } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from '../styles';
@@ -8,15 +7,13 @@ import 'firebase/compat/firestore';
 import { collection, addDoc, setDoc } from "firebase/firestore"; 
 import ValidationComponent from 'react-native-form-validator';
 import { useValidation } from 'react-native-form-validator';
-//import {Picker} from '@react-native-picker/picker';
-import DateTimePicker from '@react-native-community/datetimepicker';
-//import DropDownPicker from 'react-native-dropdown-picker';
 import { getFirestore } from "firebase/firestore"
-import RadioButtonRN from 'radio-buttons-react-native';
-import CheckBox from '@react-native-community/checkbox';
 import AddGuest from './addGuest';
 import RNPickerSelect from 'react-native-picker-select';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import {GOOGLE_API_KEY} from "@env";
+
 
 export default function TravelPlanning({navigation}) {
     const [city, setCity] = useState('')
@@ -27,8 +24,8 @@ export default function TravelPlanning({navigation}) {
     const [budget, setBudget] = useState('')
     const [postal, setPostal] = useState('')
     const [passport,setPassport] = useState('')
-    const [departureCity,setDepartureCity] = useState('')
-    const [arrivalCity,setArrivalCity] = useState('')
+    const [departureCityName,setDepartureCityName] = useState('')
+    const [arrivalCityName,setArrivalCityName] = useState('')
     const [luggage,setLuggage] = useState('')
     const [pets,setPets] = useState('')
     const [addlTravellers,setAddlTravellers] = useState('')
@@ -107,7 +104,7 @@ export default function TravelPlanning({navigation}) {
 
 
     const { validate, isFieldInError, getErrorsInField, getErrorMessages} = useValidation({
-        state: { name},
+        state: { name },
       });
 
     const onTravelPlanningSubmitPress = () => {
@@ -258,25 +255,66 @@ export default function TravelPlanning({navigation}) {
                     ]}
                 />
                 <Text style={styles.textField}>Departure City:</Text>
-                 <TextInput
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    placeholder='Departure City'
-                    onChangeText={(text) => setDepartureCity(text)}
-                    value={departureCity}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
+                <GooglePlacesAutocomplete
+                value={departureCityName}
+                styles={{
+                    textInput: {
+                        height: 48,
+                        borderRadius: 5,
+                        overflow: 'hidden',
+                        backgroundColor: 'white',
+                        marginTop: 10,
+                        marginBottom: 10,
+                        marginLeft: 30,
+                        marginRight: 30,
+                        paddingLeft: 16,
+                        backgroundColor: "#F1F1F1",}
+                  }}
+                placeholder='Departure City'
+                fetchDetails={true}
+                onPress={(data, details = null) => {
+                    // 'details' is provided when fetchDetails = true
+                    setDepartureCityName(details.name)
+                }}
+                query={{
+                    key: `${GOOGLE_API_KEY}`,
+                    language: 'en',
+                }}
+                onFail={error => console.error(error)}
                 />
+                {isFieldInError('depCityName') &&
+                    getErrorsInField('depCityName').map(errorMessage => (
+                    <Text style={styles.errorMessage}>This field is required</Text>
+                    ))}
                 <Text style={styles.textField}>Arrival City:</Text>
-                 <TextInput
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    placeholder='Arrival City'
-                    onChangeText={(text) => setArrivalCity(text)}
-                    value={arrivalCity}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
+                <GooglePlacesAutocomplete
+                    value={arrivalCityName}
+                    styles={{
+                        textInput: {
+                            height: 48,
+                            borderRadius: 5,
+                            overflow: 'hidden',
+                            backgroundColor: 'white',
+                            marginTop: 10,
+                            marginBottom: 10,
+                            marginLeft: 30,
+                            marginRight: 30,
+                            paddingLeft: 16,
+                            backgroundColor: "#F1F1F1",}
+                      }}
+                    placeholder="Arrival City"
+                    fetchDetails={true}
+                    onPress={(data, details = null) => {
+                        // 'details' is provided when fetchDetails = true
+                        setArrivalCityName(details.name)
+                    }}
+                    query={{
+                        key: `${GOOGLE_API_KEY}`,
+                        language: 'en',
+                    }}
+                    onFail={error => console.error(error)}
+
+                    />
                 <Text style={styles.textField}>Pick Departure Date:</Text>
                 <TouchableOpacity
                 title="Show Departure Date Picker" 
