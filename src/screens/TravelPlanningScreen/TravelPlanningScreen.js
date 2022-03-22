@@ -95,7 +95,7 @@ export default function TravelPlanning({navigation}) {
     };
 
     const handleBdayConfirm = (bdayDate) => {
-        console.warn("A retDate has been picked: ", bdayDate);
+        //console.warn("A retDate has been picked: ", bdayDate);
         setBday(bdayDate);
         
         hideBdayPicker();
@@ -111,7 +111,7 @@ export default function TravelPlanning({navigation}) {
 
         if (validate({
             name: { maxlength: 7, required: true },
-            //depDate: { depDate: 'MM-DD-YYYY',required: true }}    
+            
         }))
         {
 
@@ -126,8 +126,8 @@ export default function TravelPlanning({navigation}) {
             postal_code:postal,
             budget_amt:budget,
             hasPassport: passport,
-            departure_city: departureCity,
-            arrival_city: arrivalCity,
+            departure_city: departureCityName,
+            arrival_city: arrivalCityName,
             luggage_info: luggage,
             pet_info: pets,
             additional_travellers:addlTravellers,
@@ -157,7 +157,7 @@ export default function TravelPlanning({navigation}) {
             <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always">
-                 <Image source={require('/Users/varunpatel/Desktop/blackboxapp/assets/Black-Box-Collective.png')} 
+                 <Image source={require('/Users/varunpatel/Desktop/blackboxapp/assets/Black-Box-Collective-White.png')} 
                 style={styles.image}
                 resizeMode='contain'/>
                
@@ -212,12 +212,7 @@ export default function TravelPlanning({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
-                {/* <Text onChange={useEffect(() => {
-        // Update the document title using the browser API
-        myText=setMyText(bday.toDateString());
-      }, [bday])}>
-                    {myText}
-                </Text> */}
+                
                 <Text style={styles.textField}>Date of Birth:</Text>
                 <TouchableOpacity
                 title="Show Birth Date Picker" 
@@ -271,6 +266,10 @@ export default function TravelPlanning({navigation}) {
                         backgroundColor: "#F1F1F1",}
                   }}
                 placeholder='Departure City'
+                textInputProps={{
+                    placeholderTextColor: '#a1a1a1',
+                    returnKeyType: "search"
+                  }}
                 fetchDetails={true}
                 onPress={(data, details = null) => {
                     // 'details' is provided when fetchDetails = true
@@ -303,6 +302,10 @@ export default function TravelPlanning({navigation}) {
                             backgroundColor: "#F1F1F1",}
                       }}
                     placeholder="Arrival City"
+                    textInputProps={{
+                        placeholderTextColor: '#a1a1a1',
+                        returnKeyType: "search"
+                      }}
                     fetchDetails={true}
                     onPress={(data, details = null) => {
                         // 'details' is provided when fetchDetails = true

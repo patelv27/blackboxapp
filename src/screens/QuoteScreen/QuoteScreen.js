@@ -53,7 +53,7 @@ export default function QuoteScreen({navigation}) {
     const [reason, setReason] = useState('')
     const [flightType, setflightType] = useState('')
 
-    const tailwind = useTailwind();
+    // const tailwind = useTailwind();
     
     const [isDepDatePickerVisible, setDepDatePickerVisibility] = useState(false);
     const [isRetDatePickerVisible, setRetDatePickerVisibility] = useState(false);
@@ -67,7 +67,7 @@ export default function QuoteScreen({navigation}) {
     };
 
     const handleDepConfirm = (depDate) => {
-        console.warn("A depDate has been picked: ", depDate);
+        //console.warn("A depDate has been picked: ", depDate);
         setDate(depDate);
         
         hideDepDatePicker();
@@ -82,7 +82,7 @@ export default function QuoteScreen({navigation}) {
     };
 
     const handleRetConfirm = (retDate) => {
-        console.warn("A retDate has been picked: ", retDate);
+        //console.warn("A retDate has been picked: ", retDate);
         setRetDate(retDate);
         
         hideRetDatePicker();
@@ -123,19 +123,19 @@ export default function QuoteScreen({navigation}) {
             })) {
 
 
-                const docRef = addDoc(collection(db, "test"), {
+                const docRef = addDoc(collection(db, "quote"), {
                     name: fullName,
                     email_address: email,
                     departure_date: depDate,
                     phone_num: phone,
                     departure_city: depCityName,
-                    departure_date: depDate.toDateString(),
+                    departure_date: depDate.toString(),
                     flight_type: flightType,
                     passenger_weight: passWeight,
                     bag_weight: bagWeight,
                     num_passengers: numPassengers,
                     extra_info: extraInfo,
-                    return_date: retDate.toDateString(),
+                    return_date: retDate.toString(),
                     arrival_city: retCityName,
                     aircraft_type: aircraftType,
                     pet_info: pets,
@@ -173,7 +173,7 @@ export default function QuoteScreen({navigation}) {
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always"
                 nestedScrollEnabled={true}>
-                <Image source={require('/Users/varunpatel/Desktop/blackboxapp/assets/Black-Box-Collective.png')} 
+                <Image source={require('/Users/varunpatel/Desktop/blackboxapp/assets/Black-Box-Collective-White.png')} 
                 style={styles.image}
                 resizeMode='contain'/>
                 <Text style={styles.textField}>Full Name:</Text>
@@ -343,6 +343,10 @@ export default function QuoteScreen({navigation}) {
                         backgroundColor: "#F1F1F1",}
                   }}
                 placeholder='Departure City'
+                textInputProps={{
+                    placeholderTextColor: '#a1a1a1',
+                    returnKeyType: "search"
+                  }}
                 fetchDetails={true}
                 onPress={(data, details = null) => {
                     // 'details' is provided when fetchDetails = true
@@ -376,6 +380,10 @@ export default function QuoteScreen({navigation}) {
                             backgroundColor: "#F1F1F1",}
                       }}
                     placeholder="Arrival City"
+                    textInputProps={{
+                        placeholderTextColor: '#a1a1a1',
+                        returnKeyType: "search"
+                      }}
                     fetchDetails={true}
                     onPress={(data, details = null) => {
                         // 'details' is provided when fetchDetails = true

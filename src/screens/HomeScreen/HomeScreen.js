@@ -20,6 +20,8 @@ export default function HomeScreen({navigation}) {
     const db = getFirestore(firebase);
 
 
+    
+
   
 
     const onRegisterPress = () => {
@@ -38,7 +40,7 @@ export default function HomeScreen({navigation}) {
             <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always">
-                <Image source={require('/Users/varunpatel/Desktop/blackboxapp/assets/Black-Box-Collective.png')} 
+                <Image source={require('/Users/varunpatel/Desktop/blackboxapp/assets/Black-Box-Collective-White.png')} 
                 style={styles.image}
                 resizeMode='contain'/>
                 <TouchableOpacity
@@ -49,7 +51,7 @@ export default function HomeScreen({navigation}) {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => navigation.navigate('Local Plug Contact')}>
-                    <Text style={styles.buttonTitle}>BECOME A LOCAL PLUG</Text>
+                    <Text style={styles.buttonTitle}>LOCAL PLUG</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
