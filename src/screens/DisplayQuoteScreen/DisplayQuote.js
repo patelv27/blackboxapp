@@ -22,7 +22,7 @@ import { getFirestore } from "firebase/firestore"
 
 export default function DisplayQuote({route,navigation}) {
 
-    const [coins, setCoins] = useState({});
+    const [coins, setCoins] = useState("");
     
     const onHomePress = () => {
         navigation.navigate('Home');
@@ -34,14 +34,17 @@ export default function DisplayQuote({route,navigation}) {
           "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD"
         );
         const data = await res.json();
-        setCoins(data);
+        //console.log(data['ethereum']['usd'])
+        var coinValue = parseInt(data['ethereum']['usd'])
+        setCoins(coinValue);
       };
     
     useEffect(() => {
     loadData();
-    console.log('coins',coins['ethereum']);
+    console.log('coins',coins);
     });
 
+    
 
     return ( 
 
@@ -59,8 +62,8 @@ export default function DisplayQuote({route,navigation}) {
 
 
             <Text style={styles.quoteText}>Your estimated flight quote is:</Text>
-            <Text style={styles.quoteValue}>{Math.round(route.params.high_estimate*.00038803*100)/100} ETH</Text>
-            <Text style={styles.quoteValue}>{Math.round(route.params.high_estimate*.00038803*100/6)/100} ETH per Seat</Text>
+            <Text style={styles.quoteValue}>{Math.round(route.params.high_estimate*100/coins)/100} ETH</Text>
+            <Text style={styles.quoteValue}>{Math.round(route.params.high_estimate*100/(6*coins))/100} ETH per Seat</Text>
             {/* <Text style={styles.quoteValue}>{Math.floor(route.params.high_estimate / 60) * 10} ETH per Seat</Text> */}
 
 

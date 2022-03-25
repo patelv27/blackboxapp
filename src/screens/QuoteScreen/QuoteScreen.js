@@ -52,6 +52,7 @@ export default function QuoteScreen({navigation}) {
     const [retCity, setRetCity] = useState({lat:"", lng:""})
     const [reason, setReason] = useState('')
     const [flightType, setflightType] = useState('')
+    
 
     // const tailwind = useTailwind();
     
@@ -89,6 +90,7 @@ export default function QuoteScreen({navigation}) {
     };
     const db = getFirestore(firebase);
 
+    
 
    
     useEffect(() => {
@@ -144,7 +146,7 @@ export default function QuoteScreen({navigation}) {
 
                 setDistance(getDistance(depCity, retCity))
                 console.log("Document written with ID: ", docRef.id);
-                console.log('high', high)
+
                 navigation.navigate('Display Quote', {
                     high_estimate: high,
                     low_estimate: low,
