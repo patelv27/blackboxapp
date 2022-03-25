@@ -38,10 +38,11 @@ export default function LocalPlugContact({navigation}) {
     const onLocalPlugRegisterPress = () => {
 
         if (validate({
-            name: { maxlength: 7, required: true },
+            name: { required: true },
             email: { email: true, required: true},
             discord: {required: true},
-            phone: {required: true}     
+            phone: {required: true},    
+            city: {required: true}
         }))
         {
 
@@ -87,6 +88,10 @@ export default function LocalPlugContact({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                {isFieldInError('name') &&
+                    getErrorsInField('name').map(errorMessage => (
+                    <Text style={styles.errorMessage}>This field is required</Text>
+                    ))}
                 <Text style={styles.textField}>City:</Text>
                 <TextInput
                     style={styles.input}
@@ -97,6 +102,10 @@ export default function LocalPlugContact({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                {isFieldInError('city') &&
+                    getErrorsInField('city').map(errorMessage => (
+                    <Text style={styles.errorMessage}>This field is required</Text>
+                    ))}
                 <Text style={styles.textField}>Discord:</Text>
                 <TextInput
                     style={styles.input}
@@ -107,6 +116,10 @@ export default function LocalPlugContact({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                {isFieldInError('discord') &&
+                    getErrorsInField('discord').map(errorMessage => (
+                    <Text style={styles.errorMessage}>This field is required</Text>
+                    ))}
                 <View style={styles.selectContainer}>
                 <Text style={styles.textField}>Select Benefits You Can Provide:</Text>
                     <TouchableOpacity
@@ -143,6 +156,10 @@ export default function LocalPlugContact({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                {isFieldInError('email') &&
+                    getErrorsInField('email').map(errorMessage => (
+                    <Text style={styles.errorMessage}>This field is required</Text>
+                    ))}
                 <Text style={styles.textField}>Phone:</Text>
                  <TextInput
                     style={styles.input}
@@ -153,6 +170,10 @@ export default function LocalPlugContact({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                {isFieldInError('phone') &&
+                    getErrorsInField('phone').map(errorMessage => (
+                    <Text style={styles.errorMessage}>This field is required</Text>
+                    ))}
                 <Text style={styles.textField}>Extra Info:</Text>
                 <TextInput
                     style={styles.input}

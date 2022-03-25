@@ -41,7 +41,6 @@ export default function DisplayQuote({route,navigation}) {
     
     useEffect(() => {
     loadData();
-    console.log('coins',coins);
     });
 
     

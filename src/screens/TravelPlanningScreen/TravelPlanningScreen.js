@@ -104,13 +104,19 @@ export default function TravelPlanning({navigation}) {
 
 
     const { validate, isFieldInError, getErrorsInField, getErrorMessages} = useValidation({
-        state: { name },
+        state: { name,departureCityName,arrivalCityName,depDate,addlTravellers,budget},
       });
 
     const onTravelPlanningSubmitPress = () => {
 
         if (validate({
-            name: { maxlength: 7, required: true },
+            name: { required: true },
+            departureCityName: { required: true },
+            arrivalCityName: { required: true },
+            depDate: { required: true },
+            addlTravellers: { required: true },
+            budget: { required: true }
+
             
         }))
         {
@@ -172,6 +178,10 @@ export default function TravelPlanning({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                {isFieldInError('name') &&
+                    getErrorsInField('name').map(errorMessage => (
+                    <Text style={styles.errorMessage}>This field is required</Text>
+                    ))}
                 <Text style={styles.textField}>Street Address:</Text>
                 <TextInput
                     style={styles.input}
@@ -281,8 +291,8 @@ export default function TravelPlanning({navigation}) {
                 }}
                 onFail={error => console.error(error)}
                 />
-                {isFieldInError('depCityName') &&
-                    getErrorsInField('depCityName').map(errorMessage => (
+                {isFieldInError('departureCityName') &&
+                    getErrorsInField('departureCityName').map(errorMessage => (
                     <Text style={styles.errorMessage}>This field is required</Text>
                     ))}
                 <Text style={styles.textField}>Arrival City:</Text>
@@ -323,6 +333,7 @@ export default function TravelPlanning({navigation}) {
                 title="Show Departure Date Picker" 
                 onPress={showDepDatePicker}
                 style={styles.input}
+                value={depDate}
                  >
                     <Text style={styles.inputText}>{depDate.toString()}</Text></TouchableOpacity>
                 <DateTimePickerModal
@@ -341,6 +352,7 @@ export default function TravelPlanning({navigation}) {
                 title="Show Departure Date Picker" 
                 onPress={showRetDatePicker}
                 style={styles.input}
+                value={retDate}
                  >
                     <Text style={styles.inputText}>{retDate.toString()}</Text></TouchableOpacity>
                 <DateTimePickerModal
@@ -350,10 +362,6 @@ export default function TravelPlanning({navigation}) {
                     onCancel={hideRetDatePicker}
                     minimumDate={new Date()}
                 />
-                {isFieldInError('retDate') &&
-                    getErrorsInField('retDate').map(errorMessage => (
-                    <Text style={styles.errorMessage}>{errorMessage}</Text>
-                    ))}
                 <View style={styles.selectContainer}>
                     <Text style={styles.textField}>Select Desired Amenities:</Text>
                     <TouchableOpacity
@@ -385,6 +393,7 @@ export default function TravelPlanning({navigation}) {
                 <Text style={styles.textField}>Additional Guests:</Text>
                 <RNPickerSelect
                     placeholder={{ label: "Additional Passengers", value: "" }}
+                    value={addlTravellers}
                     style={
                     {inputIOS:{height: 48,
                         borderRadius: 5,
@@ -409,9 +418,9 @@ export default function TravelPlanning({navigation}) {
                         { label: "7", value: "7" }
                     ]}
                 />
-                {isFieldInError('numPassengers') &&
-                    getErrorsInField('numPassengers').map(errorMessage => (
-                    <Text style={styles.errorMessage}>{errorMessage}</Text>
+                {isFieldInError('addlTravellers') &&
+                    getErrorsInField('addlTravellers').map(errorMessage => (
+                    <Text style={styles.errorMessage}>This field is required</Text>
                     ))}
                 <Text style={styles.textField}>Estimated Budget:</Text>
                 <TextInput
@@ -423,6 +432,10 @@ export default function TravelPlanning({navigation}) {
                 underlineColorAndroid="transparent"
                 autoCapitalize="none"
                 />
+                {isFieldInError('budget') &&
+                    getErrorsInField('budget').map(errorMessage => (
+                    <Text style={styles.errorMessage}>This field is required</Text>
+                    ))}
                 <Text style={styles.textField}>Pick Hotel Type:</Text>
                 <RNPickerSelect
                     value={hotel}

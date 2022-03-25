@@ -95,8 +95,8 @@ export default function QuoteScreen({navigation}) {
    
     useEffect(() => {
         if (aircraftType && depCity && retCity && flightType) {
-            setHigh(flightType*getDistance(depCity,retCity)/740298*aircraftType['hourly']+aircraftType['daily']);
-            setLow(getDistance(depCity,retCity)/740298*aircraftType['hourly']+aircraftType['daily']);
+            setHigh(flightType['cost']*getDistance(depCity,retCity)/740298*aircraftType['hourly']+aircraftType['daily']);
+            //setLow(getDistance(depCity,retCity)/740298*aircraftType['hourly']+aircraftType['daily']);
         }
 
       },[aircraftType,depCity,retCity,flightType]);
@@ -113,7 +113,6 @@ export default function QuoteScreen({navigation}) {
                 fullName: { required: true },
                 email: { email: true, required: true },
                 depDate: { required: true },
-                retDate: { required: true },
                 phone: { required: true },
                 numPassengers: { required: true },
                 flightType: { required: true },
@@ -132,7 +131,7 @@ export default function QuoteScreen({navigation}) {
                     phone_num: phone,
                     departure_city: depCityName,
                     departure_date: depDate.toString(),
-                    flight_type: flightType,
+                    flight_type: flightType['type'],
                     passenger_weight: passWeight,
                     bag_weight: bagWeight,
                     num_passengers: numPassengers,
@@ -420,8 +419,8 @@ export default function QuoteScreen({navigation}) {
                     onValueChange={(itemValue, itemIndex) =>
                         setflightType(itemValue)}
                     items={[
-                        { label:"One Way", value: 1 },
-                        { label:"Round Trip", value: 2 },
+                        { label:"One Way", value: {'type':'One Way','cost':1, 'isVisible':false} },
+                        { label:"Round Trip", value: {'type':'Round Trip','cost':2, 'isVisible':true} },
                         //{ label: "Round Trip (Stop Over)", value: 3 },
                     ]}
                 />
@@ -429,13 +428,18 @@ export default function QuoteScreen({navigation}) {
                     getErrorsInField('flightType').map(errorMessage => (
                     <Text style={styles.errorMessage}> {errorMessage}</Text>
                     ))}
+
+                {flightType['isVisible'] && 
                 <Text style={styles.textField}>Pick Return Date and Time:</Text>
+                    }
+                {flightType['isVisible'] && 
                 <TouchableOpacity
                 title="Show Departure Date Picker" 
                 onPress={showRetDatePicker}
                 style={styles.input}
                  >
-                    <Text style={styles.inputText}>{retDate.toString()}</Text></TouchableOpacity>
+                
+                    <Text style={styles.inputText}>{retDate.toString()}</Text></TouchableOpacity>}
                 <DateTimePickerModal
                     isVisible={isRetDatePickerVisible}
                     mode="datetime"
