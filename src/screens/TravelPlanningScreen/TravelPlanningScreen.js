@@ -5,14 +5,13 @@ import styles from '../styles';
 import { firebase } from '../../firebase/config';
 import 'firebase/compat/firestore';
 import { collection, addDoc, setDoc } from "firebase/firestore"; 
-import ValidationComponent from 'react-native-form-validator';
 import { useValidation } from 'react-native-form-validator';
 import { getFirestore } from "firebase/firestore"
 import AddGuest from './addGuest';
 import RNPickerSelect from 'react-native-picker-select';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import {GOOGLE_API_KEY} from "@env";
+//import {process.env.GOOGLE_API_KEY} from "@env";
 
 
 export default function TravelPlanning({navigation}) {
@@ -39,13 +38,9 @@ export default function TravelPlanning({navigation}) {
     const [excursions, setExcursions] = useState(false);
     const [cruises, setCruises] = useState(false);
     const [rental, setRental] = useState(false);
-    //const [myText, setMyText] = useState("");
 
     const db = getFirestore(firebase);
-    const [restaurants, setRestaurants] = useState(false);
-    const [nightlife, setNightlife] = useState(false);
-    const [lodging, setLodging] = useState(false);
-    const [connections, setConnections] = useState(false);
+    
 
 
     
@@ -64,7 +59,6 @@ export default function TravelPlanning({navigation}) {
     };
 
     const handleDepConfirm = (depDate) => {
-        console.warn("A depDate has been picked: ", depDate);
         setDepDate(depDate);
         
         hideDepDatePicker();
@@ -79,7 +73,6 @@ export default function TravelPlanning({navigation}) {
     };
 
     const handleRetConfirm = (retDate) => {
-        console.warn("A retDate has been picked: ", retDate);
         setRetDate(retDate);
         
         hideRetDatePicker();
@@ -95,7 +88,6 @@ export default function TravelPlanning({navigation}) {
     };
 
     const handleBdayConfirm = (bdayDate) => {
-        //console.warn("A retDate has been picked: ", bdayDate);
         setBday(bdayDate);
         
         hideBdayPicker();
@@ -149,7 +141,6 @@ export default function TravelPlanning({navigation}) {
             
             
             })
-            console.log("Document written with ID: ", docRef.id);
         navigation.navigate('Home');
         alert("Successfully submitted!");
 
@@ -162,6 +153,7 @@ export default function TravelPlanning({navigation}) {
         <View style={styles.container}>
             <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
+                nestedScrollEnabled={false}
                 keyboardShouldPersistTaps="always">
                  <Image source={require('../../../assets/Black-Box-Collective-White.png')} 
                 style={styles.image}
@@ -286,7 +278,7 @@ export default function TravelPlanning({navigation}) {
                     setDepartureCityName(details.name)
                 }}
                 query={{
-                    key: `${GOOGLE_API_KEY}`,
+                    key: `${process.env.GOOGLE_API_KEY}`,
                     language: 'en',
                 }}
                 onFail={error => console.error(error)}
@@ -322,7 +314,7 @@ export default function TravelPlanning({navigation}) {
                         setArrivalCityName(details.name)
                     }}
                     query={{
-                        key: `${GOOGLE_API_KEY}`,
+                        key: `${process.env.GOOGLE_API_KEY}`,
                         language: 'en',
                     }}
                     onFail={error => console.error(error)}

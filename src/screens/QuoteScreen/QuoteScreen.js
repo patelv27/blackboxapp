@@ -1,22 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { useRef } from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View,Platform, Button } from 'react-native'
+import { Image, Text, TextInput, TouchableOpacity, View,Platform, Button, FlatList } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from '../styles';
 import { firebase } from '../../firebase/config';
 import 'firebase/compat/firestore';
 import { collection, addDoc, setDoc } from "firebase/firestore"; 
-import ValidationComponent from 'react-native-form-validator';
 import { useValidation } from 'react-native-form-validator';
-import DateTimePicker from '@react-native-community/datetimepicker';
-//import DropDownPicker from 'react-native-dropdown-picker';
 import RNPickerSelect from 'react-native-picker-select';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ListItem } from 'native-base';
 import { getDistance } from 'geolib';
-import {GOOGLE_API_KEY} from "@env";
-import {useTailwind} from 'tailwind-rn';
+//import {process.env.GOOGLE_API_KEY} from "@env";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 
@@ -54,7 +47,6 @@ export default function QuoteScreen({navigation}) {
     const [flightType, setflightType] = useState('')
     
 
-    // const tailwind = useTailwind();
     
     const [isDepDatePickerVisible, setDepDatePickerVisibility] = useState(false);
     const [isRetDatePickerVisible, setRetDatePickerVisibility] = useState(false);
@@ -68,7 +60,6 @@ export default function QuoteScreen({navigation}) {
     };
 
     const handleDepConfirm = (depDate) => {
-        //console.warn("A depDate has been picked: ", depDate);
         setDate(depDate);
         
         hideDepDatePicker();
@@ -83,7 +74,6 @@ export default function QuoteScreen({navigation}) {
     };
 
     const handleRetConfirm = (retDate) => {
-        //console.warn("A retDate has been picked: ", retDate);
         setRetDate(retDate);
         
         hideRetDatePicker();
@@ -96,7 +86,6 @@ export default function QuoteScreen({navigation}) {
     useEffect(() => {
         if (aircraftType && depCity && retCity && flightType) {
             setHigh(flightType['cost']*getDistance(depCity,retCity)/740298*aircraftType['hourly']+aircraftType['daily']);
-            //setLow(getDistance(depCity,retCity)/740298*aircraftType['hourly']+aircraftType['daily']);
         }
 
       },[aircraftType,depCity,retCity,flightType]);
@@ -172,8 +161,8 @@ export default function QuoteScreen({navigation}) {
         <View style={styles.container}>
             <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
-                keyboardShouldPersistTaps="always"
-                nestedScrollEnabled={true}>
+                nestedScrollEnabled={false}
+                keyboardShouldPersistTaps="always">
                 <Image source={require('../../../assets/Black-Box-Collective-White.png')} 
                 style={styles.image}
                 resizeMode='contain'/>
@@ -355,7 +344,7 @@ export default function QuoteScreen({navigation}) {
                     setDepCityName(details.name)
                 }}
                 query={{
-                    key: `${GOOGLE_API_KEY}`,
+                    key: `${process.env.GOOGLE_API_KEY}`,
                     language: 'en',
                 }}
                 onFail={error => console.error(error)}
@@ -392,7 +381,7 @@ export default function QuoteScreen({navigation}) {
                         setRetCityName(details.name)
                     }}
                     query={{
-                        key: `${GOOGLE_API_KEY}`,
+                        key: `${process.env.GOOGLE_API_KEY}`,
                         language: 'en',
                     }}
                     onFail={error => console.error(error)}
@@ -491,7 +480,10 @@ export default function QuoteScreen({navigation}) {
                     <Text style={styles.buttonTitle}>Submit</Text>
                 </TouchableOpacity>
             </KeyboardAwareScrollView>
-        </View>
+
+                
+            </View>
+       
 
     );
 }

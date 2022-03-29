@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { useRef } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View,Platform, Button,Pressables, Pressable } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from '../styles';
 import { firebase } from '../../firebase/config';
 import 'firebase/compat/firestore';
 import { collection, addDoc, setDoc } from "firebase/firestore"; 
-import ValidationComponent from 'react-native-form-validator';
 import { useValidation } from 'react-native-form-validator';
-//import {Picker} from '@react-native-picker/picker';
-import DateTimePicker from '@react-native-community/datetimepicker';
-//import DropDownPicker from 'react-native-dropdown-picker';
 import { getFirestore } from "firebase/firestore"
-import RadioButtonRN from 'radio-buttons-react-native';
-import CheckBox from '@react-native-community/checkbox';
 
 export default function LocalPlugContact({navigation}) {
     const [city, setCity] = useState('')
-    //const [tripExtras,setTripExtras] = useState('')
     const [addlInfo,setaddlInfo] = useState('')
     const [phone,setPhone] = useState('')
     const [name, setName] = useState('')

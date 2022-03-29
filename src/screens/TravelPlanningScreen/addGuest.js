@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { AppRegistry, View, Text, Button, TextInput} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-import styles from './styles';
+//import styles from './styles';
 
 export default class AddGuest extends Component {
 

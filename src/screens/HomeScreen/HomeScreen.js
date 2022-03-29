@@ -3,8 +3,6 @@ import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from '../styles';
 import { firebase } from '../../firebase/config';
-// import firebase from 'firebase/compat/app';
-// import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { collection, addDoc, setDoc } from "firebase/firestore"; 
 
@@ -18,8 +16,8 @@ import { Linking } from 'react-native';
 export default function HomeScreen({navigation}) {
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
+    // const [password, setPassword] = useState('')
+    // const [confirmPassword, setConfirmPassword] = useState('')
     const db = getFirestore(firebase);
 
 
@@ -27,16 +25,6 @@ export default function HomeScreen({navigation}) {
 
   
 
-    const onRegisterPress = () => {
-
-        console.log('hello');
-        const docRef = addDoc(collection(db, "test"), {
-            name: fullName,
-            email_address: email
-            })
-            console.log("Document written with ID: ", docRef.id);
-
-    }
 
     return (
         <View style={styles.container}>
