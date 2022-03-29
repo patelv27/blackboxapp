@@ -17,6 +17,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 
 import { getFirestore } from "firebase/firestore"
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 export default function QuoteScreen({navigation}) {
@@ -159,10 +160,16 @@ export default function QuoteScreen({navigation}) {
 
 
         <View style={styles.container}>
-            <KeyboardAwareScrollView
+            {/* <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
                 nestedScrollEnabled={false}
-                keyboardShouldPersistTaps="always">
+                keyboardShouldPersistTaps="always"> */}
+            <FlatList
+                style={{ flex: 1, width: '100%' }}
+                nestedScrollEnabled={true}
+                keyboardShouldPersistTaps="always"
+                ListHeaderComponent={
+                <>
                 <Image source={require('../../../assets/Black-Box-Collective-White.png')} 
                 style={styles.image}
                 resizeMode='contain'/>
@@ -316,6 +323,8 @@ export default function QuoteScreen({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <ScrollView
+                keyboardShouldPersistTaps="always">
                 <Text style={styles.textField}>Departure City:</Text>
                 <GooglePlacesAutocomplete
                 value={depCity}
@@ -349,10 +358,10 @@ export default function QuoteScreen({navigation}) {
                 }}
                 onFail={error => console.error(error)}
                 />
-                {isFieldInError('depCityName') &&
+                {/* {isFieldInError('depCityName') &&
                     getErrorsInField('depCityName').map(errorMessage => (
                     <Text style={styles.errorMessage}>This field is required</Text>
-                    ))}
+                    ))} */}
                 <Text style={styles.textField}>Arrival City:</Text>
                     <GooglePlacesAutocomplete
                     value={retCity}
@@ -387,10 +396,11 @@ export default function QuoteScreen({navigation}) {
                     onFail={error => console.error(error)}
 
                     />
-                {isFieldInError('retCityName') &&
+                {/* {isFieldInError('retCityName') &&
                     getErrorsInField('retCityName').map(errorMessage => (
                     <Text style={styles.errorMessage}>This field is required</Text>
-                    ))}
+                    ))} */}
+                </ScrollView>
                 <Text style={styles.textField}>Type of Flight:</Text>
                 <RNPickerSelect
                     placeholder={{ label: "Type of Flight", value: "" }}
@@ -479,7 +489,9 @@ export default function QuoteScreen({navigation}) {
                     onPress={() => onRegisterPress()}>
                     <Text style={styles.buttonTitle}>Submit</Text>
                 </TouchableOpacity>
-            </KeyboardAwareScrollView>
+                
+                </>}></FlatList>
+            
 
                 
             </View>
