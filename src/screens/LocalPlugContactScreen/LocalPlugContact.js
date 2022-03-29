@@ -74,7 +74,7 @@ export default function LocalPlugContact({navigation}) {
             <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always">
-                <Image source={require('/Users/varunpatel/Desktop/blackboxapp/assets/Black-Box-Collective-White.png')} 
+                <Image source={require('../../../assets/Black-Box-Collective-White.png')} 
                 style={styles.image}
                 resizeMode='contain'/>
                <Text style={styles.textField}>Full Name:</Text>

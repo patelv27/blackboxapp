@@ -9,6 +9,9 @@ import 'firebase/compat/firestore';
 import { collection, addDoc, setDoc } from "firebase/firestore"; 
 
 import { getFirestore } from "firebase/firestore"
+import { Linking } from 'react-native';
+
+
 
 
 
@@ -40,7 +43,7 @@ export default function HomeScreen({navigation}) {
             <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always">
-                <Image source={require('/Users/varunpatel/Desktop/blackboxapp/assets/Black-Box-Collective-White.png')} 
+                <Image source={require('../../../assets/Black-Box-Collective-White.png')}
                 style={styles.image}
                 resizeMode='contain'/>
                 <TouchableOpacity
@@ -60,7 +63,7 @@ export default function HomeScreen({navigation}) {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => navigation.navigate('Quote')}>
+                    onPress={() => Linking.openURL('https://linktr.ee/blackboxcollective')}>
                     <Text style={styles.buttonTitle}>OUR LINKS</Text>
                 </TouchableOpacity>
             </KeyboardAwareScrollView>
