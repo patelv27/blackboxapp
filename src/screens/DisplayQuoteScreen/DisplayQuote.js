@@ -39,7 +39,7 @@ export default function DisplayQuote({route,navigation}) {
                 keyboardShouldPersistTaps="always"
                 nestedScrollEnabled={true}>
 
-            <Image source={require('/Users/varunpatel/Desktop/blackboxapp/assets/Black-Box-Collective-White.png')} 
+            <Image source={require('../../../assets/Black-Box-Collective-White.png')} 
                 style={styles.image}
                 resizeMode='contain'/>
 
