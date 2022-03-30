@@ -323,8 +323,6 @@ export default function QuoteScreen({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
-                <ScrollView
-                keyboardShouldPersistTaps="always">
                 <Text style={styles.textField}>Departure City:</Text>
                 <GooglePlacesAutocomplete
                 value={depCity}
@@ -400,7 +398,6 @@ export default function QuoteScreen({navigation}) {
                     getErrorsInField('retCityName').map(errorMessage => (
                     <Text style={styles.errorMessage}>This field is required</Text>
                     ))} */}
-                </ScrollView>
                 <Text style={styles.textField}>Type of Flight:</Text>
                 <RNPickerSelect
                     placeholder={{ label: "Type of Flight", value: "" }}
@@ -433,7 +430,7 @@ export default function QuoteScreen({navigation}) {
                     }
                 {flightType['isVisible'] && 
                 <TouchableOpacity
-                title="Show Departure Date Picker" 
+                title="Show Return Date Picker" 
                 onPress={showRetDatePicker}
                 style={styles.input}
                  >

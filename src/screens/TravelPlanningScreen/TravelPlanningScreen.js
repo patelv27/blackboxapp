@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Image, Text, TextInput, TouchableOpacity, View,Platform, Button,Pressables, Pressable } from 'react-native'
+import { Image, Text, TextInput, TouchableOpacity, View,Platform, Button,Pressables, Pressable,FlatList } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from '../styles';
 import { firebase } from '../../firebase/config';
@@ -11,7 +11,7 @@ import AddGuest from './addGuest';
 import RNPickerSelect from 'react-native-picker-select';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-//import {process.env.GOOGLE_API_KEY} from "@env";
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 export default function TravelPlanning({navigation}) {
@@ -32,7 +32,7 @@ export default function TravelPlanning({navigation}) {
     const [resort,setResort] = useState('')
     const [depDate,setDepDate] = useState(new Date())
     const [retDate,setRetDate] = useState(new Date())
-
+    const [flightType, setflightType] = useState('')
     const [flights, setFlights] = useState(false);
     const [needHotel, setNeedHotel] = useState(false);
     const [excursions, setExcursions] = useState(false);
@@ -96,7 +96,7 @@ export default function TravelPlanning({navigation}) {
 
 
     const { validate, isFieldInError, getErrorsInField, getErrorMessages} = useValidation({
-        state: { name,departureCityName,arrivalCityName,depDate,addlTravellers,budget},
+        state: { name,departureCityName,arrivalCityName,depDate,addlTravellers,budget,flightType},
       });
 
     const onTravelPlanningSubmitPress = () => {
@@ -107,7 +107,8 @@ export default function TravelPlanning({navigation}) {
             arrivalCityName: { required: true },
             depDate: { required: true },
             addlTravellers: { required: true },
-            budget: { required: true }
+            budget: { required: true },
+            flightType: {required:true}
 
             
         }))
@@ -136,6 +137,7 @@ export default function TravelPlanning({navigation}) {
             need_excursions:excursions,
             need_cruises:cruises,
             need_rental:rental,
+            flight_type:flightType['type']
 
 
             
@@ -151,14 +153,20 @@ export default function TravelPlanning({navigation}) {
 
 
         <View style={styles.container}>
-            <KeyboardAwareScrollView
+            {/* <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
                 nestedScrollEnabled={false}
-                keyboardShouldPersistTaps="always">
+                keyboardShouldPersistTaps="always"> */}
+            <FlatList
+                style={{ flex: 1, width: '100%' }}
+                nestedScrollEnabled={true}
+                keyboardShouldPersistTaps="always"
+                ListHeaderComponent={
+                <>
                  <Image source={require('../../../assets/Black-Box-Collective-White.png')} 
                 style={styles.image}
                 resizeMode='contain'/>
-               
+
 
                <Text style={styles.textField}>Full Name:</Text>
                 <TextInput
@@ -320,6 +328,29 @@ export default function TravelPlanning({navigation}) {
                     onFail={error => console.error(error)}
 
                     />
+                <Text style={styles.textField}>Type of Flight:</Text>
+                <RNPickerSelect
+                    placeholder={{ label: "Type of Flight", value: "" }}
+                    style={
+                    {inputIOS:{height: 48,
+                        borderRadius: 5,
+                        overflow: 'hidden',
+                        backgroundColor: 'white',
+                        marginTop: 10,
+                        marginBottom: 10,
+                        marginLeft: 30,
+                        marginRight: 30,
+                        paddingLeft: 16,
+                        backgroundColor: "#F1F1F1",}}}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setflightType(itemValue)}
+                    items={[
+                        { label:"One Way", value: {'type':'One Way','cost':1, 'isVisible':false} },
+                        { label:"Round Trip", value: {'type':'Round Trip','cost':2, 'isVisible':true} },
+                        //{ label: "Round Trip (Stop Over)", value: 3 },
+                    ]}
+                />
+                
                 <Text style={styles.textField}>Pick Departure Date:</Text>
                 <TouchableOpacity
                 title="Show Departure Date Picker" 
@@ -339,14 +370,16 @@ export default function TravelPlanning({navigation}) {
                     getErrorsInField('depDate').map(errorMessage => (
                     <Text style={styles.errorMessage}>{errorMessage}</Text>
                     ))}
-                 <Text style={styles.textField}>Pick Return Date:</Text>
+                {flightType['isVisible'] && 
+                 <Text style={styles.textField}>Pick Return Date:</Text>}
+                {flightType['isVisible'] && 
                  <TouchableOpacity
-                title="Show Departure Date Picker" 
+                title="Show Return Date Picker" 
                 onPress={showRetDatePicker}
                 style={styles.input}
                 value={retDate}
                  >
-                    <Text style={styles.inputText}>{retDate.toString()}</Text></TouchableOpacity>
+                    <Text style={styles.inputText}>{retDate.toString()}</Text></TouchableOpacity>}
                 <DateTimePickerModal
                     isVisible={isRetDatePickerVisible}
                     mode="datetime"
@@ -501,7 +534,7 @@ export default function TravelPlanning({navigation}) {
                     onPress={() => onTravelPlanningSubmitPress()}>
                     <Text style={styles.buttonTitle}>Submit</Text>
                 </TouchableOpacity>
-            </KeyboardAwareScrollView>
+                </>}></FlatList>
         </View>
 
     );
