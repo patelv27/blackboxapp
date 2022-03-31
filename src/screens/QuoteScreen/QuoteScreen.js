@@ -9,8 +9,9 @@ import { useValidation } from 'react-native-form-validator';
 import RNPickerSelect from 'react-native-picker-select';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { getDistance } from 'geolib';
-//import {process.env.GOOGLE_API_KEY} from "@env";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import {Picker} from '@react-native-picker/picker';
+
 
 
 
@@ -46,7 +47,8 @@ export default function QuoteScreen({navigation}) {
     const [retCity, setRetCity] = useState({lat:"", lng:""})
     const [reason, setReason] = useState('')
     const [flightType, setflightType] = useState('')
-    
+    const [flightTypeValue, setFlightTypeValue] = useState("");
+
 
     
     const [isDepDatePickerVisible, setDepDatePickerVisibility] = useState(false);
@@ -252,9 +254,26 @@ export default function QuoteScreen({navigation}) {
                     items={[
                         { label:"Light Jet (Max 6 Passengers)", value:{'daily':6000, 'hourly':3100, 'type':"Light Jet"} },
                         { label:"Medium Jet (Max 8 Passengers)", value:{'daily':8500, 'hourly':3500, 'type':"Medium Jet"} },
-                        { label: "Heavy Jet (Max 8 Pass", value: {'daily':11000, 'hourly':4900, 'type':"Heavy Jet"} },
+                        { label: "Heavy Jet (Max 8 Pass)", value: {'daily':11000, 'hourly':4900, 'type':"Heavy Jet"} },
                     ]}
                 />
+                {/* <Picker
+                selectedValue={flightTypeValue}
+                style={{
+                    borderRadius: 5,
+                    backgroundColor: 'white',
+                    marginLeft: 30,
+                    marginRight: 30,
+                    paddingLeft: 16,
+                    backgroundColor: "#F1F1F1",}}
+                onValueChange={(itemValue, itemIndex) =>
+                    setFlightTypeValue(itemValue)
+                }>
+                <Picker.Item color="#000000" label="Light Jet (Max 6 Passengers)" value="Light Jet" />
+                <Picker.Item color="#000000" label="Medium Jet (Max 8 Passengers)" value="Medium Jet" />
+                <Picker.Item color="#000000" label="Heavy Jet (Max 8 Pass)" value="Heavy Jet" />
+                </Picker> */}
+
                 {isFieldInError('aircraftType') &&
                     getErrorsInField('aircraftType').map(errorMessage => (
                     <Text style={styles.errorMessage}>{errorMessage}</Text>
