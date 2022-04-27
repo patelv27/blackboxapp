@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Image, Text, TextInput, TouchableOpacity, View,Platform, Button,Pressables, Pressable,FlatList } from 'react-native'
+import { Image, Text, TextInput, TouchableOpacity, View,Platform, Button,Pressables, Pressable,FlatList,KeyboardAvoidingView} from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from '../styles';
 import { firebase } from '../../firebase/config';
@@ -12,7 +12,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { ScrollView } from 'react-native-gesture-handler';
-
+//import {process.env.GOOGLE_API_KEY} from "@env";
 
 export default function TravelPlanning({navigation}) {
     const [city, setCity] = useState('')
@@ -152,7 +152,10 @@ export default function TravelPlanning({navigation}) {
     return ( 
 
 
-        <View style={styles.container}>
+         <KeyboardAvoidingView
+         style={styles.container}
+         behavior="height"
+         keyboardVerticalOffset="100">
             {/* <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
                 nestedScrollEnabled={false}
@@ -217,6 +220,7 @@ export default function TravelPlanning({navigation}) {
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
                     placeholder='ZIP Code'
+                    keyboardType="numeric"
                     onChangeText={(text) => setPostal(text)}
                     value={postal}
                     underlineColorAndroid="transparent"
@@ -250,9 +254,21 @@ export default function TravelPlanning({navigation}) {
                         marginBottom: 10,
                         marginLeft: 30,
                         marginRight: 30,
-                        paddingLeft: 16}}}
+                        paddingLeft: 16},
+                        inputAndroid:{height: 48,
+                            color:'black',
+                            borderRadius: 5,
+                            overflow: 'hidden',
+                            backgroundColor: 'white',
+                            marginTop: 10,
+                            marginBottom: 10,
+                            marginLeft: 30,
+                            marginRight: 30,
+                            paddingLeft: 16,
+                            backgroundColor: "#F1F1F1"}}}
                     onValueChange={(itemValue, itemIndex) =>
                         setPassport(itemValue)}
+                    useNativeAndroidPickerStyle={false}
                     items={[
                         { label:"Yes", value:"Yes" },
                         { label:"No", value:"No" },
@@ -341,9 +357,21 @@ export default function TravelPlanning({navigation}) {
                         marginLeft: 30,
                         marginRight: 30,
                         paddingLeft: 16,
-                        backgroundColor: "#F1F1F1",}}}
+                        backgroundColor: "#F1F1F1",},
+                        inputAndroid:{height: 48,
+                            color:'black',
+                            borderRadius: 5,
+                            overflow: 'hidden',
+                            backgroundColor: 'white',
+                            marginTop: 10,
+                            marginBottom: 10,
+                            marginLeft: 30,
+                            marginRight: 30,
+                            paddingLeft: 16,
+                            backgroundColor: "#F1F1F1"}}}
                     onValueChange={(itemValue, itemIndex) =>
                         setflightType(itemValue)}
+                    useNativeAndroidPickerStyle={false}
                     items={[
                         { label:"One Way", value: {'type':'One Way','cost':1, 'isVisible':false} },
                         { label:"Round Trip", value: {'type':'Round Trip','cost':2, 'isVisible':true} },
@@ -429,9 +457,21 @@ export default function TravelPlanning({navigation}) {
                         marginLeft: 30,
                         marginRight: 30,
                         paddingLeft: 16,
-                        backgroundColor: "#F1F1F1",}}}
+                        backgroundColor: "#F1F1F1",},
+                        inputAndroid:{height: 48,
+                            color:'black',
+                            borderRadius: 5,
+                            overflow: 'hidden',
+                            backgroundColor: 'white',
+                            marginTop: 10,
+                            marginBottom: 10,
+                            marginLeft: 30,
+                            marginRight: 30,
+                            paddingLeft: 16,
+                            backgroundColor: "#F1F1F1"}}}
                     onValueChange={(itemValue, itemIndex) =>
                         setAddlTravellers(itemValue)}
+                    useNativeAndroidPickerStyle={false}
                     items={[
                         { label:"None", value:"0" },
                         { label:"1", value:"1" },
@@ -452,6 +492,7 @@ export default function TravelPlanning({navigation}) {
                 style={styles.input}
                 placeholderTextColor="#aaaaaa"
                 placeholder='Estimated Budget'
+                keyboardType="numeric"
                 onChangeText={(text) => setBudget(text)}
                 value={budget}
                 underlineColorAndroid="transparent"
@@ -474,9 +515,21 @@ export default function TravelPlanning({navigation}) {
                         marginBottom: 10,
                         marginLeft: 30,
                         marginRight: 30,
-                        paddingLeft: 16}}}
+                        paddingLeft: 16},
+                        inputAndroid:{height: 48,
+                            color:'black',
+                            borderRadius: 5,
+                            overflow: 'hidden',
+                            backgroundColor: 'white',
+                            marginTop: 10,
+                            marginBottom: 10,
+                            marginLeft: 30,
+                            marginRight: 30,
+                            paddingLeft: 16,
+                            backgroundColor: "#F1F1F1"}}}
                     onValueChange={(itemValue, itemIndex) =>
                         setHotel(itemValue)}
+                    useNativeAndroidPickerStyle={false}
                     items={[
                         { label:"5 Star", value:"5 Star" },
                         { label:"4 Star", value:"4 Star" },
@@ -487,6 +540,7 @@ export default function TravelPlanning({navigation}) {
                 <TextInput
                     style={[styles.input, {height:100}]}
                     multiline={true}
+                    blurOnSubmit={true}
                     placeholderTextColor="#aaaaaa"
                     placeholder='Pets–What Type, How Many, and Weight for Each'
                     onChangeText={(text) => setPets(text)}
@@ -497,6 +551,8 @@ export default function TravelPlanning({navigation}) {
                 <Text style={styles.textField}>Luggage Info (if applicable):</Text>
                 <TextInput
                     style={styles.input}
+                    multiline={true}
+                    blurOnSubmit={true}
                     placeholderTextColor="#aaaaaa"
                     placeholder='Luggage Types and Weight?'
                     onChangeText={(text) => setLuggage(text)}
@@ -517,9 +573,21 @@ export default function TravelPlanning({navigation}) {
                         marginBottom: 10,
                         marginLeft: 30,
                         marginRight: 30,
-                        paddingLeft: 16}}}
+                        paddingLeft: 16},
+                        inputAndroid:{height: 48,
+                            color:'black',
+                            borderRadius: 5,
+                            overflow: 'hidden',
+                            backgroundColor: 'white',
+                            marginTop: 10,
+                            marginBottom: 10,
+                            marginLeft: 30,
+                            marginRight: 30,
+                            paddingLeft: 16,
+                            backgroundColor: "#F1F1F1"}}}
                     onValueChange={(itemValue, itemIndex) =>
                         setResort(itemValue)}
+                    useNativeAndroidPickerStyle={false}
                     items={[
                         { label:"Yes", value:"yes" },
                         { label:"No", value:"no" },
@@ -535,7 +603,7 @@ export default function TravelPlanning({navigation}) {
                     <Text style={styles.buttonTitle}>Submit</Text>
                 </TouchableOpacity>
                 </>}></FlatList>
-        </View>
+        </KeyboardAvoidingView>
 
     );
 

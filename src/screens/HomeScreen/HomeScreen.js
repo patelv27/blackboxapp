@@ -37,7 +37,7 @@ export default function HomeScreen({navigation}) {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => navigation.navigate('Quote')}>
-                    <Text style={styles.buttonTitle}>GO TO QUOTE PAGE</Text>
+                    <Text style={styles.buttonTitle}>GET A QUOTE</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
