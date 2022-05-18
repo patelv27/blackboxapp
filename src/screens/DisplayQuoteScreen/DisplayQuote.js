@@ -19,7 +19,6 @@ export default function DisplayQuote({route,navigation}) {
 
 
     const switchDollars = () => {
-        console.log('dollar value changed from',dollars)
         setDollars(!dollars);
 
     }
@@ -72,7 +71,7 @@ export default function DisplayQuote({route,navigation}) {
             <Text style={styles.quoteText}>From: {route.params.depart_city}</Text>
             <Text style={styles.quoteText}>To: {route.params.arr_city}</Text>
             <Text style={styles.quoteText}>In a: {route.params.plane_type}</Text>
-            <Text style={styles.quoteText}>Departing On: {route.params.departure_Date}</Text>
+            {/* <Text style={styles.quoteText}>Departing On: {route.params.departure_Date}</Text> */}
 
 
             <TouchableOpacity

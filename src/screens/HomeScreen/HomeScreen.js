@@ -42,12 +42,17 @@ export default function HomeScreen({navigation}) {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => navigation.navigate('Local Plug Contact')}>
-                    <Text style={styles.buttonTitle}>LOCAL PLUG</Text>
+                    <Text style={styles.buttonTitle}>LOCAL PLUG SIGN UP</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => navigation.navigate('Travel Planning')}>
-                    <Text style={styles.buttonTitle}>TRAVEL PLANNING</Text>
+                    <Text style={styles.buttonTitle}>LOCAL PLUG</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => Linking.openURL('https://discord.com/invite/r5W5tbgauF')}>
+                    <Text style={styles.buttonTitle}>TRAVEL CHAT</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
@@ -56,7 +61,7 @@ export default function HomeScreen({navigation}) {
                 </TouchableOpacity>
             </KeyboardAwareScrollView>
             <View style={styles.copyrightField}>
-                <Text style={styles.copyrightText}> {'\u00A9'} Black Box Collective 2022</Text>
+                <Text style={styles.copyrightText}> Black Box Collective 2022</Text>
             </View>
         </View>
     )

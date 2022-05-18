@@ -74,7 +74,7 @@ export default function QuoteScreen({navigation}) {
    
     useEffect(() => {
         if (aircraftType && depCity && retCity && flightType) {
-            setHigh(flightType['cost']*getDistance(depCity,retCity)/740298*aircraftType['hourly']+aircraftType['daily']);
+            setHigh(flightType['cost']*getDistance(depCity,retCity)/740298*aircraftType['hourly']+.3*aircraftType['hourly']+flightType['dailyRate']*aircraftType['daily']);
         }
 
       },[aircraftType,depCity,retCity,flightType]);
@@ -88,10 +88,7 @@ export default function QuoteScreen({navigation}) {
     const onRegisterPress = () => {
         try {
             if (validate({
-                fullName: { required: true },
                 email: { email: true, required: true },
-                depDate: { required: true },
-                numPassengers: { required: true },
                 flightType: { required: true },
                 aircraftType: { required: true },
                 depCityName: { required: true },
@@ -102,14 +99,9 @@ export default function QuoteScreen({navigation}) {
 
 
                 const docRef = addDoc(collection(db, "quote"), {
-                    name: fullName,
                     email_address: email,
-                    departure_date: depDate,
                     departure_city: depCityName,
-                    departure_date: depDate.toString(),
                     flight_type: flightType['type'],
-                    num_passengers: numPassengers,
-                    return_date: retDate.toString(),
                     arrival_city: retCityName,
                     aircraft_type: aircraftType,
                 })
@@ -124,10 +116,6 @@ export default function QuoteScreen({navigation}) {
                     depart_city: depCityName,
                     arr_city: retCityName,
                     plane_type: aircraftType['type'],
-                    departure_Date: depDate.toDateString(),
-                    return_Date: retDate.toDateString(),
-
-
                 });
                 alert("Successfully submitted!");
 
@@ -144,10 +132,6 @@ export default function QuoteScreen({navigation}) {
          style={styles.container}
          behavior="height"
          keyboardVerticalOffset="100">
-            {/* <KeyboardAwareScrollView
-                style={{ flex: 1, width: '100%' }}
-                nestedScrollEnabled={false}
-                keyboardShouldPersistTaps="always"> */}
             <FlatList
                 style={{ flex: 1, width: '100%' }}
                 nestedScrollEnabled={true}
@@ -157,20 +141,6 @@ export default function QuoteScreen({navigation}) {
                 <Image source={require('../../../assets/Black-Box-Collective-White.png')} 
                 style={styles.image}
                 resizeMode='contain'/>
-                <Text style={styles.textField}>Full Name:</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder='Full Name'
-                    placeholderTextColor="#aaaaaa"
-                    onChangeText={(text) => setFullName(text)}
-                    value={fullName}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                {isFieldInError('fullName') &&
-                    getErrorsInField('fullName').map(errorMessage => (
-                    <Text style={styles.errorMessage}>{errorMessage}</Text>
-                    ))}
                 <Text style={styles.textField}>Email:</Text>
                 <TextInput
                     style={styles.input}
@@ -184,39 +154,6 @@ export default function QuoteScreen({navigation}) {
                 />
                 {isFieldInError('email') &&
                     getErrorsInField('email').map(errorMessage => (
-                    <Text style={styles.errorMessage}>{errorMessage}</Text>
-                    ))}
-                {/* <Text style={styles.textField}>Phone Number:</Text> */}
-                {/* <TextInput
-                    style={styles.input}
-                    placeholder='Phone Number'
-                    placeholderTextColor="#aaaaaa"
-                    onChangeText={(text) => setPhone(text)}
-                    value={phone}
-                    keyboardType="numeric"
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                {isFieldInError('phone') &&
-                    getErrorsInField('phone').map(errorMessage => (
-                    <Text style={styles.errorMessage}>{errorMessage}</Text>
-                    ))} */}
-                <Text style={styles.textField}>Pick Departure Date and Time:</Text>
-                <TouchableOpacity
-                title="Show Departure Date Picker" 
-                onPress={showDepDatePicker}
-                style={styles.input}
-                 >
-                    <Text style={styles.inputText}>{depDate.toString()}</Text></TouchableOpacity>
-                <DateTimePickerModal
-                    isVisible={isDepDatePickerVisible}
-                    mode="datetime"
-                    onConfirm={handleDepConfirm}
-                    onCancel={hideDepDatePicker}
-                    minimumDate={new Date()}
-                />
-                {isFieldInError('depDate') &&
-                    getErrorsInField('depDate').map(errorMessage => (
                     <Text style={styles.errorMessage}>{errorMessage}</Text>
                     ))}
                 <Text style={styles.textField}>Pick Type of Aircraft:</Text>
@@ -250,7 +187,7 @@ export default function QuoteScreen({navigation}) {
                     items={[
                         { label:"Light Jet (Max 6 Passengers)", value:{'daily':6000, 'hourly':3100, 'type':"Light Jet"} },
                         { label:"Medium Jet (Max 8 Passengers)", value:{'daily':8500, 'hourly':3500, 'type':"Medium Jet"} },
-                        { label: "Heavy Jet (Max 8 Pass)", value: {'daily':11000, 'hourly':4900, 'type':"Heavy Jet"} },
+                        { label: "Heavy Jet (Max 10 Passengers)", value: {'daily':11000, 'hourly':4900, 'type':"Heavy Jet"} },
                     ]}
                 />
 
@@ -258,94 +195,7 @@ export default function QuoteScreen({navigation}) {
                     getErrorsInField('aircraftType').map(errorMessage => (
                     <Text style={styles.errorMessage}>{errorMessage}</Text>
                     ))}
-                {/* <Text style={styles.textField}>Purpose of Trip:</Text>
-                <RNPickerSelect
-                    placeholder={{ label: "Purpose of Trip", value: "" }}
-                    style={
-                    {inputIOS:{height: 48,
-                        borderRadius: 5,
-                        overflow: 'hidden',
-                        backgroundColor: 'white',
-                        marginTop: 10,
-                        marginBottom: 10,
-                        marginLeft: 30,
-                        marginRight: 30,
-                        paddingLeft: 16,
-                        backgroundColor: "#F1F1F1"},
-                        inputAndroid:{height: 48,
-                            color:'black',
-                            borderRadius: 5,
-                            overflow: 'hidden',
-                            backgroundColor: 'white',
-                            marginTop: 10,
-                            marginBottom: 10,
-                            marginLeft: 30,
-                            marginRight: 30,
-                            paddingLeft: 16,
-                            backgroundColor: "#F1F1F1"}}}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setReason(itemValue)}
-                    useNativeAndroidPickerStyle={false}
-                    items={[
-                        { label:"Pleasure", value:"Pleasure" },
-                        { label:"Business", value:"Business" },
-                        { label: "Bereavement", value: "Bereavement" },
-                        { label: "Medical", value: "Medical" }
-                    ]}
-                /> */}
-                <Text style={styles.textField}>Number of Passengers:</Text>
-                <RNPickerSelect
-                    placeholder={{ label: "Number of Passengers", value: "" }}
-                    style={
-                    {inputIOS:{height: 48,
-                        borderRadius: 5,
-                        overflow: 'hidden',
-                        backgroundColor: 'white',
-                        marginTop: 10,
-                        marginBottom: 10,
-                        marginLeft: 30,
-                        marginRight: 30,
-                        paddingLeft: 16,
-                        backgroundColor: "#F1F1F1",},
-                        inputAndroid:{height: 48,
-                            color:'black',
-                            borderRadius: 5,
-                            overflow: 'hidden',
-                            backgroundColor: 'white',
-                            marginTop: 10,
-                            marginBottom: 10,
-                            marginLeft: 30,
-                            marginRight: 30,
-                            paddingLeft: 16,
-                            backgroundColor: "#F1F1F1"}}}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setnumPassengers(itemValue)}
-                    useNativeAndroidPickerStyle={false}
-                    items={[
-                        { label:"1", value:"1" },
-                        { label:"2", value:"2" },
-                        { label: "3", value: "3" },
-                        { label: "4", value: "4" },
-                        { label: "5", value: "5" },
-                        { label: "6", value: "6" },
-                        { label: "7", value: "7" },
-                        { label: "8", value: "8" }
-                    ]}
-                />
-                {isFieldInError('numPassengers') &&
-                    getErrorsInField('numPassengers').map(errorMessage => (
-                    <Text style={styles.errorMessage}>{errorMessage}</Text>
-                    ))}
-                {/* <Text style={styles.textField}>Total Passenger Weight:</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    placeholder='Total Passenger Weight (lbs)'
-                    onChangeText={(text) => setpassWeight(text)}
-                    value={passWeight}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                /> */}
+                
                 <Text style={styles.textField}>Departure City:</Text>
                 <GooglePlacesAutocomplete
                 value={depCity}
@@ -379,10 +229,6 @@ export default function QuoteScreen({navigation}) {
                 }}
                 onFail={error => console.error(error)}
                 />
-                {/* {isFieldInError('depCityName') &&
-                    getErrorsInField('depCityName').map(errorMessage => (
-                    <Text style={styles.errorMessage}>This field is required</Text>
-                    ))} */}
                 <Text style={styles.textField}>Arrival City:</Text>
                     <GooglePlacesAutocomplete
                     value={retCity}
@@ -417,10 +263,6 @@ export default function QuoteScreen({navigation}) {
                     onFail={error => console.error(error)}
 
                     />
-                {/* {isFieldInError('retCityName') &&
-                    getErrorsInField('retCityName').map(errorMessage => (
-                    <Text style={styles.errorMessage}>This field is required</Text>
-                    ))} */}
                 <Text style={styles.textField}>Type of Flight:</Text>
                 <RNPickerSelect
                     placeholder={{ label: "Type of Flight", value: "" }}
@@ -450,9 +292,9 @@ export default function QuoteScreen({navigation}) {
                         setflightType(itemValue)}
                     useNativeAndroidPickerStyle={false}
                     items={[
-                        { label:"One Way", value: {'type':'One Way','cost':1, 'isVisible':false} },
-                        { label:"Round Trip", value: {'type':'Round Trip','cost':2, 'isVisible':true} },
-                        //{ label: "Round Trip (Stop Over)", value: 3 },
+                        { label:"One Way", value: {'type':'One Way','cost':1,'dailyRate':1, 'isVisible':false} },
+                        { label:"Round Trip (Same Day)", value: {'type':'Round Trip (Same Day)','cost':2,'dailyRate':1, 'isVisible':false} },
+                        { label:"Round Trip (Stop Over)", value: {'type':'Round Trip (Stop Over)','cost':2,'dailyRate':2, 'isVisible':false} },
                     ]}
                 />
                 {isFieldInError('flightType') &&
@@ -482,42 +324,6 @@ export default function QuoteScreen({navigation}) {
                     getErrorsInField('retDate').map(errorMessage => (
                     <Text style={styles.errorMessage}>{errorMessage}</Text>
                     ))}
-                {/* <Text style={styles.textField}>Pets (if applicable):</Text>
-                <TextInput
-                    style={[styles.input, {height:100}]}
-                    multiline={true}
-                    blurOnSubmit={true}
-                    placeholder='Number of Pets–Include Type and Weight'
-                    placeholderTextColor="#aaaaaa"
-                    onChangeText={(text) => setPets(text)}
-                    value={pets}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                <Text style={styles.textField}>Bag Type and Weight (if applicable):</Text>
-                <TextInput
-                    style={[styles.input, {height:100}]}
-                    multiline={true}
-                    blurOnSubmit={true}
-                    placeholderTextColor="#aaaaaa"
-                    placeholder='Bag Types and Weight'
-                    onChangeText={(text) => setbagWeight(text)}
-                    value={bagWeight}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                <Text style={styles.textField}>Additional Info:</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    placeholder='Extra Info'
-                    onChangeText={(text) => setextraInfo(text)}
-                    value={extraInfo}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                */}
-
                 
                 <TouchableOpacity
                     style={styles.button}
@@ -526,9 +332,6 @@ export default function QuoteScreen({navigation}) {
                 </TouchableOpacity>
                 
                 </>}></FlatList>
-            
-
-                
             </KeyboardAvoidingView>
        
 
