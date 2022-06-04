@@ -42,7 +42,7 @@ export default function HomeScreen({navigation}) {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => navigation.navigate('Local Plug Contact')}>
-                    <Text style={styles.buttonTitle}>LOCAL PLUG SIGN UP</Text>
+                    <Text style={styles.buttonTitle}>SIGN UP</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
@@ -52,7 +52,7 @@ export default function HomeScreen({navigation}) {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => Linking.openURL('https://discord.com/invite/r5W5tbgauF')}>
-                    <Text style={styles.buttonTitle}>TRAVEL CHAT</Text>
+                    <Text style={styles.buttonTitle}>DISCORD</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}

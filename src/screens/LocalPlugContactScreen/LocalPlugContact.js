@@ -70,6 +70,8 @@ export default function LocalPlugContact({navigation}) {
                 <Image source={require('../../../assets/Black-Box-Collective-White.png')} 
                 style={styles.image}
                 resizeMode='contain'/>
+                <Text style={styles.infoText}>This page is where our members can sign up to become a Local Plug.</Text>
+
                <Text style={styles.textField}>Full Name:</Text>
               
                 <TextInput

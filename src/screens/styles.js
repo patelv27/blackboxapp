@@ -104,6 +104,17 @@ export default StyleSheet.create({
         //fontSize:16
         
     },
+    infoText: {
+        flex: 1,
+        textAlign:'center',
+        padding:30,
+        marginBottom:10,
+        fontWeight:'800',
+        color:"white",
+        //fontFamily:'poppins',
+        fontSize:16
+        
+    },
     datetime:{
         height: 48,
         borderRadius: 5,

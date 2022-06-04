@@ -170,6 +170,8 @@ export default function TravelPlanning({navigation}) {
                 style={styles.image}
                 resizeMode='contain'/>
 
+                <Text style={styles.infoText}>Welcome to Black Box Collective's Local Plug Concierge service. Here you can request Local information about your chosen destination! Join our Discord and grab your desired cities roll to stay connected</Text>
+
 
                <Text style={styles.textField}>Full Name:</Text>
                 <TextInput
